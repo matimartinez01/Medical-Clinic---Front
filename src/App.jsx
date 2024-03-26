@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
-import './App.css'
 import MainLayout from './layouts/MainLayout'
 import Appointments from './pages/Appointments'
+import Home from './pages/Home'
+import SingIn from './pages/SingIn'
+import SingUp from './pages/SingUp'
 
 
 function App() {
@@ -11,10 +13,11 @@ function App() {
     <BrowserRouter>
       <Routes>
         
-        {/* <Route path="/" element={<Home />} />
-        <Route path="/register" element={<SingUp />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<SingIn />} />
-        <Route path="/avaiableLoans" element={<AvailableLoans />} />
+        <Route path="/register" element={<SingUp />} />
+        
+        {/* <Route path="/avaiableLoans" element={<AvailableLoans />} />
         <Route path="*" element={<NotFoundError />} /> */}
 
 

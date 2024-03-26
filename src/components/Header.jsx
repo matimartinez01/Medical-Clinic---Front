@@ -57,7 +57,7 @@ const Header = () => {
             <nav className="bg-gray-300 py-4 px-6">
                 <div className="max-w-7xl mx-auto flex justify-between items-center">
                     <div className="flex items-center">
-                        <img className='w-[200px] h-10' src="/MindHub.png" alt="Logo Mind Hub Bank" />
+                        <img className='w-[200px] h-10' src="" alt="Logo Medical Clinic" />
                     </div>
                 <div className="hidden md:flex space-x-4">
                     {LINKS_HEADER.map((link) =>{
@@ -92,6 +92,7 @@ const Header = () => {
                         <img className='w-8 h-8 cursor-pointer' src="/LogOut.png" alt="Icon log out" onClick={handleConfirm}/>
                     </div>
                 </div>
+                
                 {isOpen && (
                     <div className="absolute top-19 left-0 w-full bg-gray-300 md:hidden mt-2 z-50">
                         {LINKS_HEADER.map((link) =>{
