@@ -52,7 +52,7 @@ function SingIn() {
                     .then(response => {
                         dispatch(current(response.data))
                         // console.log(response.data);
-                        navigate("/prueba")
+                        navigate("/specialties")
                         // localStorage.setItem("lastLogin", new Date().toISOString())
                     })
                     .catch(error => console.log(error.response.data))
