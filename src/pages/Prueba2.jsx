@@ -1,24 +1,32 @@
-import React, { useState } from 'react';
-
-// Función para obtener la fecha actual en el formato YYYY-MM-DD
-const getCurrentDate = () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = (now.getMonth() + 1).toString().padStart(2, '0');
-    const day = now.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-};
-
-
+import React, { useState, useEffect } from 'react';
 
 
 function App() {
+
+    // Función para obtener la fecha actual en el formato YYYY-MM-DD
+    const getCurrentDate = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+
+
     // Estado para almacenar la fecha actual
     const [currentDate, setCurrentDate] = useState(getCurrentDate());
+
     // Estado para almacenar la fecha seleccionada por el usuario
     const [selectedDate, setSelectedDate] = useState(getCurrentDate());
+
     // Estado para almacenar los turnos del médico seleccionado
     const [doctorTurns, setDoctorTurns] = useState([]);
+
+
+    useEffect(() => {
+        setCurrentDate(getCurrentDate()); // Establecer la fecha actual cuando se monta el componente
+    }, []);
 
     // Función para cambiar la fecha hacia adelante
     const nextWeek = () => {
@@ -40,11 +48,24 @@ function App() {
         setCurrentDate(event.target.value);
     };
 
-    // Lógica para la selección de turnos de un médico específico
-    const selectDoctor = (date, time) => {
+    // const selectTurn = (day, time) => {
+    //     const selectedDateTime = new Date(day);
+    //     selectedDateTime.setHours(time);
+    //     console.log({
+    //         fecha: selectedDateTime.toISOString().slice(0, 10),
+    //         hora: `${time}:00`,
+    //         medico: 'Nombre del Médico',
+    //         paciente: 'Nombre del Paciente',
+    //     });
+    // };
 
+    // Lógica para la selección de turnos de un médico específico
+    const selectDoctor = (day, time) => {
+        const selectedDateTime = new Date(day)
+        selectedDateTime.setHours(time);
+        
         const turno = {
-            date: date,
+            date: selectedDateTime.toISOString().slice(0, 10),
             time: `${time}:00`,
             medico: 'Medico', // Aquí deberías obtener el nombre del médico aquí el ID seleccionado
             paciente: 'Paciente', // Aquí podrías obtener el nombre del paciente si está logueado
@@ -76,12 +97,11 @@ function App() {
 
     console.log(doctorTurns);
 
-    
 
     // Generar los días de la semana
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const weekDays = [];
-    let currentDateObj = new Date();
+    let currentDateObj = new Date(currentDate);
     for (let i = 0; i < 3; i++) {
         weekDays.push({
             date: currentDateObj.toISOString().split('T')[0],
@@ -144,3 +164,5 @@ function App() {
 }
 
 export default App;
+
+
