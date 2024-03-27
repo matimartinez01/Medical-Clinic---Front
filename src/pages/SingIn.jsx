@@ -38,13 +38,13 @@ function SingIn() {
 
     function handleSingIn(e) {
         e.preventDefault()
-        axios.post("/api/auth/login", userData)
+        axios.post("/api/patient/login", userData)
         .then(response => {
             console.log(response.data)
             let token = response.data
             dispatch(login(response.data))
             if (token) {
-                axios.get('/api/clients/current', {
+                axios.get('/api/patient/current', {
                     headers: {
                         Authorization: "Bearer " + token
                     }
@@ -64,6 +64,8 @@ function SingIn() {
         })
         
     }
+
+    console.log(userData);
 
 
 
@@ -127,7 +129,7 @@ function SingIn() {
 
         <main className='w-full flex flex-col flex-1'>
             <div className='flex flex-wrap justify-center items-center'>
-                <img className='md:w-1/2' src="/Login.png" alt="Image a doctor" />
+                <img className='md:w-1/2' src="/Login.jpg" alt="Image a doctor" />
                 <form className='flex flex-col justify-center items-center gap-5 p-8 md:w-1/2' onSubmit={handleSingIn}>
                         <fieldset className='flex justify-center items-center gap-3'>
                             <img className='w-8' src="/User.png" alt="" />

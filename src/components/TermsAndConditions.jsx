@@ -31,7 +31,7 @@ function TermsAndConditions() {
                     Health Center does not make any commitment to update the materials.</p>
                 <p className='text-xs px-3 md:px-36 text-justify'>By accessing our online platform, you acknowledge that you have read and understood these terms and conditions
                     and agree to be bound by them. If you do not agree with any part of these terms and conditions, please do not access the website.</p>
-                <p className='text-xs px-3 md:px-36 text-justify'>For any inquiries regarding these terms and conditions, please contact us at [contact email/phone number].</p>
+                <p className='text-xs px-3 md:px-36 text-justify'>For any inquiries regarding these terms and conditions, please contact us at <a className='text-[#06A9B2]' href="mailto:info@serenetyheatlhcenter.com">info@serenetyheatlhcenter.com</a></p>
             </div>
 
         </div>

@@ -15,7 +15,7 @@ function SingUp() {
     const birthDateRef = useRef(null)
 
     const formRef = useRef(null)
- 
+
 
     const [register, setRegister] = useState({
         firstName: "",
@@ -62,9 +62,11 @@ function SingUp() {
     }, [isOpen])
 
     function handleInput(e) {
-        setRegister({
+        const value = e.target.name === 'genre' ? e.target.value.toUpperCase()  : e.target.value
+        return setRegister({
             ...register,
-            [e.target.name]: e.target.value
+            [e.target.name]: value,
+            
         })
     }
 
@@ -106,7 +108,7 @@ function SingUp() {
             passwordValid = false
         }
 
-        if (passwordRef.current.value.length < 8 && passwordRef.current.value != "") {
+        if (passwordRef.current.value.length < 6 && passwordRef.current.value != "") {
             setPasswordLength(true)
             passwordValid = false
         }
@@ -136,23 +138,25 @@ function SingUp() {
 
             }
 
-            axios.post("/api/auth/register", register)
+            axios.post("/api/patient/register", register)
                 .then(response => {
                     console.log(response.data)
-                    if (response.data == "Client created") {
+                    if (response.status === 200) {
                         setRegisterSuccess(true)
                         setRegister({
                             firstName: "",
                             lastName: "",
                             email: "",
                             password: "",
+                            genre: "",
+                            birthDate: ""
                         })
                         formRef.current.reset()
                     }
                 })
                 .catch(error => {
                     console.log(error.response.data)
-                    if (error.response.data == "The email entered already exists in the database") {
+                    if (error.response.data == "There is a patient with that email") {
                         setEmailExist(true)
                     }
                 })
@@ -208,12 +212,18 @@ function SingUp() {
 
     function handleTermsAndConditions() {
         setTermsAndConditions(!termsAndConditions)
-        if (!termsAndConditions) {
-            document.body.classList.add('overflow-hidden');
-        } else {
-            document.body.classList.remove('overflow-hidden');
-        }
     }
+
+    useEffect(() => {
+        if (termsAndConditions) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = 'auto'
+        }
+        return () => {
+            document.body.style.overflow = 'auto'
+        }
+    }, [termsAndConditions])
 
 
 
@@ -274,7 +284,7 @@ function SingUp() {
 
         <main className='w-full flex flex-col flex-1'>
             <div className='flex flex-wrap justify-center items-center'>
-                <img className='md:w-1/2' src="/Register.png" alt="Image a doctor" />
+                <img className='md:w-1/2' src="/Register.jpg" alt="Image a doctor" />
 
                 <form ref={formRef} className='flex flex-col justify-center items-center gap-4 lg:gap-6 p-8 md:w-1/2' onSubmit={handleSubmit}>
                         <fieldset className='flex justify-center items-center gap-3 relative'>
@@ -306,7 +316,13 @@ function SingUp() {
 
                         <fieldset className='flex justify-center items-center gap-3 relative'>
                             <img className='w-8' src="/Genre.png" alt="" />
-                            <input type="text" name="genre" ref={genreRef} className="font-semibold cursor-pointer border-2 border-[#F19E22] w-[300px] rounded-xl h-10 px-4" placeholder='Genre' onFocus={handleSelectChange} onInput={handleInput}/>
+                            <select name="genre" ref={genreRef} className="font-semibold cursor-pointer border-2 border-[#F19E22] w-[300px] rounded-xl h-10 px-4" onInput={handleInput} onFocus={handleSelectChange}>
+                                <option value="">Select your genre please...</option>
+                                <option value="male">MALE</option>
+                                <option value="female">FEMALE</option>
+                                <option value="other">OTHER</option>
+                            </select>
+                            {/* <input type="text" name="genre" ref={genreRef} className="font-semibold cursor-pointer border-2 border-[#F19E22] w-[300px] rounded-xl h-10 px-4" placeholder='Genre' onFocus={handleSelectChange} onInput={handleInput}/> */}
                             {genreEntered && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Please enter your genre</p>}
                         </fieldset>
 
@@ -331,9 +347,9 @@ function SingUp() {
                             <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
                                 <div className="bg-white p-6 rounded-lg shadow-md text-center">
                                     <p className='text-green-600 font-bold text-lg'>Registered successfully!</p>
-                                    <p className="pt-4">Thank you for trusting MindHub Bank.</p>
+                                    <p className="pt-4">Thank you for trusting Serenety Health Center.</p>
                                     <div className="flex justify-center gap-4 mt-6">
-                                        <button className="bg-gray-600 hover:bg-gray-700 text-white font-bold px-4 py-2 rounded-md w-[120px]" onClick={handleSuccess}>Continue</button>
+                                        <button className="bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 rounded-md w-[120px]" onClick={handleSuccess}>Continue</button>
                                     </div>
                                 </div>
                             </div>
@@ -343,68 +359,44 @@ function SingUp() {
                         {termsAndConditions && (
                             <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50 px-2" >
                                 <div className="bg-white p-6 rounded-lg shadow-md text-left max-w-[700px] max-h-[80vh] overflow-y-auto">
-                                    <h5 className='font-bold'>Terms and Conditions for Opening a Bank Account</h5>
-                                    <h6>Welcome to MindHub Bank! Before you proceed to open an account with us, please take a moment to review the following terms and conditions:</h6>
-                                    <ol>
-                                        <li></li>
-                                        <li></li>
-                                    </ol>
-                                    <ol className='list-decimal list-inside pl-4 text-left'>
-                                        <li className='font-semibold'>Account Eligibility:</li>
-                                        <ul className='list-disc list-inside pl-4'>
-                                            <li>You must be at least 18 years old.</li>
-                                            <li>You agree to provide accurate and up-to-date personal information.</li>
-                                        </ul>
-
-                                        <li className='font-semibold'>Identification and Verification:</li>
-                                        <ul className='list-disc list-inside pl-4'>
-                                            <li>A valid government-issued photo ID is required.</li>
-                                            <li>Additional documents may be requested for identity verification.</li>
-                                        </ul>
-
-                                        <li className='font-semibold'>Account Usage:</li>
-                                        <ul className='list-disc list-inside pl-4'>
-                                            <li>Your account is for personal use only.</li>
-                                            <li>You agree not to engage in illegal or fraudulent activities.</li>
-                                        </ul>
-
-                                        <li className='font-semibold'>Fees and Charges:</li>
-                                        <ul className='list-disc list-inside pl-4'>
-                                            <li>Review our fee schedule for details on account-related charges.</li>
-                                            <li>We reserve the right to update fees with prior notice.</li>
-                                        </ul>
-
-                                        <li className='font-semibold'>Online Banking:</li>
-                                        <ul className='list-disc list-inside pl-4'>
-                                            <li>Access to online banking services is provided.</li>
-                                            <li>Safeguard your login credentials and report any unauthorized access.</li>
-                                        </ul>
-
-                                        <li className='font-semibold'>Account Closure:</li>
-                                        <ul className='list-disc list-inside pl-4'>
-                                            <li>Either party may close the account with reasonable notice.</li>
-                                            <li>Closing fees may apply; refer to our fee schedul e.</li>
-                                        </ul >
-
-                                        <li className='font-semibold'>Privacy and Security:</li>
-                                        <ul className='list-disc list-inside pl-4'>
-                                            <li>Your information is protected under our privacy policy.</li>
-                                            <li>Report any security concerns or unauthorized transactions immediately.</li>
-                                        </ul >
-
-                                    </ol>
-                                    <p className='pt-4 text-justify'>By proceeding with the account opening process, you acknowledge and agree to these terms and conditions. MindHub Bank reserves the right to amend these terms
-                                        with prior notice. If you have any questions, please contact our customer service. Thank you for choosing MindHub Bank!</p>
+                                    <h5 className='font-bold text-[#06A9B2]'>Terms and Conditions Serenety Health Center</h5>
+                                    <h6>Welcome to Serenity Health Center! These Terms and Conditions outline the rules and regulations for the use of Serenity Health Center's Website and services.</h6>
+                                    <p className='pt-2'>By accessing this Website and/or registering as a patient at Serenity Health Center, we assume you accept these Terms and Conditions in full. 
+                                        Do not continue to use Serenity Health Center's Website or services if you do not accept all of the Terms and Conditions stated on this page.</p>
+                                    <h6 className='font-bold'>1. Services</h6>
+                                    <p>Serenity Health Center offers a range of medical services including but not limited to consultations, treatments, and procedures. All services are subject to
+                                        availability and may be subject to change without notice.</p>
+                                    <h6 className='font-bold'>2. Registration</h6>
+                                    <p>To access certain services or make appointments at Serenity Health Center, you may be required to register as a patient. You agree to provide accurate, complete, 
+                                        and current information during the registration process and to update such information as necessary to maintain its accuracy.</p>
+                                    <h6 className='font-bold'>3. Privacy</h6>
+                                    <p>Your privacy is important to us. Please review our Privacy Policy to understand how we collect, use, and safeguard your personal information.</p>
+                                    <h6 className='font-bold'>4. Appointments</h6>
+                                    <p>Appointment scheduling is subject to availability. Serenity Health Center reserves the right to reschedule or cancel appointments as necessary. We encourage 
+                                        patients to arrive on time for their appointments and to notify us promptly if they are unable to attend.</p>
+                                    <h6 className='font-bold'>5. Payments</h6>
+                                    <p>Payment for services rendered at Serenity Health Center is due at the time of service unless other arrangements have been made in advance. We accept various 
+                                        forms of payment, including cash, credit/debit cards, and insurance payments where applicable.</p>
+                                    <h6 className='font-bold'>6. Medical Advice</h6>
+                                    <p>The information provided on this Website is for general informational purposes only and should not be construed as medical advice or used as a substitute 
+                                        for professional medical diagnosis or treatment. Always seek the advice of your physician or other qualified healthcare provider with any questions you may 
+                                        have regarding a medical condition.</p>
+                                    <h6 className='font-bold'>7. Liability</h6>
+                                    <p>Serenity Health Center shall not be liable for any direct, indirect, incidental, special, or consequential damages arising out of or in any way connected with 
+                                        the use of this Website or services provided by Serenity Health Center.</p>
+                                    <h6 className='font-bold'>8. Governing Law</h6>
+                                    <p>These Terms and Conditions are governed by and construed in accordance with the laws of the State of Florida, without regard to its conflict of law provisions.</p>
+                                    <h6 className='font-bold'>9. Changes to Terms and Conditions</h6>
+                                    <p>Serenity Health Center reserves the right to modify or replace these Terms and Conditions at any time without prior notice. Your continued use of the Website or services
+                                        after any such changes constitutes your acceptance of the new Terms and Conditions.</p>
+                                    <h6 className='font-bold'>10. Contact Us</h6>
+                                    <p>If you have any questions about these Terms and Conditions, please contact us at <a className='text-[#06A9B2]' href="mailto:info@serenetyheatlhcenter.com">info@serenetyheatlhcenter.com</a></p>
                                     <div className="flex justify-center gap-4 mt-6">
                                         <button className="bg-gray-600 hover:bg-gray-700 text-white font-bold px-4 py-2 rounded-md w-[120px]" onClick={handleTermsAndConditions}>Continue</button>
                                     </div>
                                 </div>
                             </div>
                         )}
-
-
-
-
                         <NavLink to={"/login"} className='text-red-600 font-semibold cursor-pointer text-xs underline'>Are you already registered? Sing in</NavLink>
                 </form>
             </div>

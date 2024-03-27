@@ -161,8 +161,8 @@ function Home() {
                     </ul>
                 </div>
             </div>
-
-            <iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d114869.6290740972!2d-80.26654091793995!3d25.88014204160656!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1smiami%20clinica!5e0!3m2!1ses-419!2sar!4v1711461948533!5m2!1ses-419!2sar" className='w-full h-[400px] mt-10' allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+            
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3598.4669681028386!2d-80.36536052403078!3d25.589394815702452!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d9c51b39a08a0d%3A0x8692fd5f1de210c4!2sMiami%20Health%20Center!5e0!3m2!1ses!2sar!4v1711493518778!5m2!1ses!2sar" className='w-full h-[400px] mt-10'  allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
         </main>
         
         <GeneralFooter/>
