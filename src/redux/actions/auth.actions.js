@@ -8,8 +8,6 @@ const current = createAction("CURRENT", (data) => {
     //     email: data.email
     // }
 
-
-
     return {
         payload: {
             ...data,

@@ -1,83 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
 import Carrousel from '../components/Carrousel'
 import GeneralFooter from '../components/GeneralFooter'
+import GeneralHeader from '../components/GeneralHeader'
 
 
 function Home() {
 
-    const [isOpen, setIsOpen] = useState(false)
-
-    const toggleMenu = () => {
-        setIsOpen(!isOpen)
-    }
-
-    useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = 'hidden'
-        } else {
-            document.body.style.overflow = 'auto'
-        }
-        return () => {
-            document.body.style.overflow = 'auto'
-        }
-    }, [isOpen])
-
-
-
     return (
     <>
-        <header className='w-full flex-col flex items-center justify-center'>
-            <img className='w-60 pt-4 max-[768px]:hidden' src="/LogoSerenetyH.png" alt="Image logo Serenety Health Center" />
-            <div className='bg-blue-800 w-full items-center justify-center gap-4 mt-4 hidden md:flex space-x-4'>
-                <NavLink to="/home" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Home</NavLink>
-                <NavLink to="/home" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Medical Specialties</NavLink>
-                <NavLink to="/home" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">My Appointments</NavLink>
-                <NavLink to="/home" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Contact</NavLink>
-                <NavLink to="/register" className="p-2 text-center font-bold text-[#F19E22] hover:text-white">Sing up</NavLink>
-                <NavLink to="/login" className="p-2 text-center font-bold text-[#F19E22] hover:text-white">Sing in</NavLink>
-            </div>
+        <GeneralHeader />
 
-            <div className="md:hidden flex justify-between items-center w-full px-10 py-3">
-                        <button onClick={toggleMenu} className="text-white focus:outline-none pt-6">
-                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="black">
-                                {isOpen ? (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                ) : (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                )}
-                            </svg>
-                        </button>
-                        <img className='w-40 pt-4' src="/LogoSerenetyH.png" alt="Image logo Serenety Health Center" />
-            </div>
-            {isOpen && (
-                    <div className="absolute w-full bg-blue-600 md:hidden z-50 flex flex-col items-start justify-start gap-4 top-[85px] pl-8 h-full">
-                        <NavLink to="/home" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Home</NavLink>
-                        <NavLink to="/home" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Medical Specialties</NavLink>
-                        <NavLink to="/home" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">My Appointments</NavLink>
-                        <NavLink to="/home" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Contact</NavLink>
-                        <hr className='w-[95%]' />
-                        <NavLink to="/register" className="p-2 text-center font-bold text-[#F19E22] hover:text-white">Sing up</NavLink>
-                        <NavLink to="/login" className="p-2 text-center font-bold text-[#F19E22] hover:text-white">Sing in</NavLink>
-                    </div>
-                )}
-        </header>
-        
         <main classneme="w-full flex flex-col flex-1">
             <Carrousel/>
             
-            <h1 className='text-center font-bold text-3xl mt-10 text-[#F19E22]'>Serenety</h1>
-            <h1 className='text-center font-bold text-5xl mb-10 text-[#06A9B2] '>Health Center</h1>
+            <h1 className='text-center font-bold text-6xl mt-10 text-[#F19E22]'>SERENETY</h1>
+            <h1 className='text-center font-bold text-[45px] mb-10 text-[#06A9B2] px-2'>HEALTH CENTER</h1>
             <h3 className='text-center w-3/4 md:w-2/3 mx-auto text-lg italic font-semibold'>Our main objective is to satisfy the needs of our patients and their families, providing personalized care through professionals with extensive experience, 
             recognition and ethical commitment. Human resources, together with state-of-the-art technology, allow us to offer our patients the best of our Institution 
             for the provision of health care services, where quality and warmth are the basis of our daily work.</h3>
@@ -112,7 +49,7 @@ function Home() {
                         <img className='w-10 h-10' src="/Location.png" alt="Image location" />
                         <div className='flex flex-wrap'>
                             <p className='font-semibold text-lg'>Family Medical Group Miami</p>
-                            <p className='text-sm'>736 NW 22nd Ave, Miami, FL 33125, Estados Unidos</p>
+                            <p className='text-sm'>736 NW 22nd Ave, Miami, FL 33125, U.S.A</p>
                         </div>
                     </div>
                     
@@ -120,7 +57,7 @@ function Home() {
                         <img className='w-10 h-10' src="/Location.png" alt="Image location" />
                         <div className='flex flex-wrap'>
                             <p className='font-semibold text-lg'>Hispanic Health Care Center</p>
-                            <p className='text-sm'>1070 SW 1st St, Miami, FL 33130, Estados Unidos</p>
+                            <p className='text-sm'>1070 SW 1st St, Miami, FL 33130, U.S.A</p>
                         </div>
                     </div>
                     
@@ -128,7 +65,7 @@ function Home() {
                         <img className='w-10 h-10' src="/Location.png" alt="Image location" />
                         <div className='flex flex-wrap'>
                             <p className='font-semibold text-lg'>Miami Urgent Care</p>
-                            <p className='text-sm'>2645 SW 37th Ave #502, Miami, FL 33133, Estados Unidos</p>
+                            <p className='text-sm'>2645 SW 37th Ave #502, Miami, FL 33133, U.S.A</p>
                         </div>
                     </div>
                 </div>
