@@ -57,7 +57,7 @@ const HeaderUser = () => {
             <nav className="bg-white  md:pt-4">
                 <div className="mx-auto flex justify-between p-4 w-full md:flex-col gap-4 items-center md:p-0">
                     <div className="flex items-center">
-                        <img className='w-[150px] h-[45px] md:w-[190px] md:h-14' src="/public/LogoSerenetyH.png" alt="Logo SerenityH" />
+                        <img className='w-[150px] h-[45px] md:w-[190px] md:h-14' src="/LogoSerenetyH.png" alt="Logo SerenityH" />
                     </div>
 
                     <div className="flex pt-2 md:w-full  md:bg-[#F19E22] " >
@@ -99,7 +99,7 @@ const HeaderUser = () => {
 
                 </div>
                 {isOpen && (
-                    <div className="absolute left-0 w-full bg-white md:hidden  z-50">
+                    <div className="absolute left-0 w-full h-screen bg-white md:hidden  z-50">
                         {LINKS_HEADER.map((link) => {
                             return (
                                 <Fragment key={link.href}>

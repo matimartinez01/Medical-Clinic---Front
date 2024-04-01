@@ -14,6 +14,8 @@ import authActions from './redux/actions/auth.actions'
 import NotFoundError from './pages/NotFoundError'
 import Contact from './pages/Contact'
 import Neurology from './pages/Neurology'
+import AdminPanel from './pages/AdminPanel'
+import { withAuth } from './hocs/whitAuth'
 
 
 
@@ -44,6 +46,10 @@ function App() {
     }, [])
 
 
+    const SelectAppointmentWithauth = withAuth(SelectAppointment)
+    const SpecialtiesWithAuth = withAuth(Specialties)
+
+
   return (
     <BrowserRouter>
       <Routes>
@@ -53,6 +59,7 @@ function App() {
         <Route path="/register" element={<SingUp />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/ineccu" element={<Neurology />} />
+        <Route path="/admin" element={<AdminPanel />} />
         <Route path="*" element={<NotFoundError />} />
 
 
@@ -70,8 +77,8 @@ function App() {
             </MainLayout>
           }>
 
-          <Route path="specialties" element={<Specialties/>} />
-          <Route path="/appointment" element={<SelectAppointment />} />
+          <Route path="/appointment" element={<SelectAppointmentWithauth />} />   
+          <Route path="specialties" element={<SpecialtiesWithAuth/>} />
         </Route>
       </Routes>
     </BrowserRouter>
