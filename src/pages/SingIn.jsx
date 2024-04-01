@@ -25,8 +25,16 @@ function SingIn() {
 
     function handleSingIn(e) {
         e.preventDefault()
-        axios.post("/api/patient/login", userData)
-        .then(response => {
+
+        const isAdmin = userData.email.includes("doctor")
+        const isUser = !userData.email.includes("doctor")
+
+        console.log(isAdmin)
+        console.log(isUser)
+
+        if(isUser) {
+            axios.post("/api/patient/login", userData)
+            .then(response => {
             console.log(response.data)
             let token = response.data
             dispatch(login(response.data))
@@ -38,21 +46,45 @@ function SingIn() {
                 })
                     .then(response => {
                         dispatch(current(response.data))
-                        // console.log(response.data);
+                        // console.log(response.data)
                         navigate("/appointment")
                         // localStorage.setItem("lastLogin", new Date().toISOString())
                     })
                     .catch(error => console.log(error.response.data))
             }
-            
-        })
-        .catch(error => { console.log(error.response.data)
-            setinvalidEntrance(error.response.data)
-        })
-        
+            })
+            .catch(error => { console.log(error.response.data)
+                setinvalidEntrance(error.response.data)
+            })
+        } 
+
+        if(isAdmin){
+            axios.post("/api/doctor/login", userData)
+            .then(response => {
+                console.log(response.data)
+                let token = response.data
+                dispatch(login(response.data))
+                if (token) {
+                    axios.get('/api/doctor/current', {
+                        headers: {
+                            Authorization: "Bearer " + token
+                        }
+                    })
+                        .then(response => {
+                            dispatch(current(response.data))
+                            navigate("/admin")
+                        })
+                        .catch(error => console.log(error.response.data))
+                }
+            })
+            .catch(error => { console.log(error.response.data)
+                setinvalidEntrance(error.response.data)
+            })
+        }
     }
 
-    console.log(userData);
+
+    console.log(userData)
 
 
 
