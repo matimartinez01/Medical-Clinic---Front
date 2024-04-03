@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
-import GeneralFooter from '../components/GeneralFooter'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import {SPECIALITIES} from '../utils/linksSpecialities'
+import HeaderAdmin from '../components/HeaderAdmin'
+import FooterAdmin from '../components/FooterAdmin'
 
 const RegisterDoctor = () => {
 
@@ -11,9 +12,9 @@ const RegisterDoctor = () => {
     const emailRef = useRef(null)
     const passwordRef = useRef(null)
     const genreRef = useRef(null)
-    const birthDateRef = useRef(null)
     const specialityRef = useRef(null)
     const workDaysRef = useRef(null)
+    const hoursRef = useRef(null)
 
 
     const formRef = useRef(null)
@@ -36,35 +37,16 @@ const RegisterDoctor = () => {
     const [emailEntered, setEmailEntered] = useState(false)
     const [emailCharacters, setEmailCharacters] = useState(false)
     const [emailExist, setEmailExist] = useState(false)
+    const [emailInvalid, setEmailInvalid] = useState(false)
     const [passwordEntered, setPasswordEntered] = useState(false)
     const [genreEntered, setGenreEntered] = useState(false)
     const [passwordLength, setPasswordLength] = useState(false)
     const [registerSuccess, setRegisterSuccess] = useState(false)
-    const [specialities, setSpecialities] = useState([])
     const [workDaysLegend, setWorkDaysLegend] = useState(false)
     const [hoursLegend, setHoursLegend] = useState(false)
     const [specialityLegend, setSpecialityLegend] = useState(false)
 
-    const [isChecked, setIsChecked] = useState(false)
-    const [isNotChecked, setisNotChecked] = useState(false)
 
-    const [isOpen, setIsOpen] = useState(false)
-
-
-    const toggleMenu = () => {
-        setIsOpen(!isOpen)
-    }
-
-    useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = 'hidden'
-        } else {
-            document.body.style.overflow = 'auto'
-        }
-        return () => {
-            document.body.style.overflow = 'auto'
-        }
-    }, [isOpen])
 
     function handleInput(e) {
         const value = e.target.name === 'genre' ? e.target.value.toUpperCase()  : e.target.value
@@ -94,6 +76,7 @@ const RegisterDoctor = () => {
         let passwordValid = true
         let genreValid = true
 
+        const token = localStorage.getItem("token")
 
         if (firstNameRef.current.value == "") {
             setFirstNameEntered(true)
@@ -110,10 +93,17 @@ const RegisterDoctor = () => {
             emailValid = false
         }
 
-        if (!emailRef.current.value.includes("@") && emailRef.current.value != "") {
-            setEmailCharacters(true)
+        if(!emailRef.current.value.includes("@doctor") && emailRef.current.value != "") {
+            setEmailInvalid(true)
             emailValid = false
         }
+
+        // if (!emailRef.current.value.includes("@") && emailRef.current.value != "") {
+        //     setEmailCharacters(true)
+        //     emailValid = false
+        // }
+
+
 
         if (passwordRef.current.value == "") {
             setPasswordEntered(true)
@@ -161,12 +151,14 @@ const RegisterDoctor = () => {
                 workDays: workDaysTest,
                 hours: hoursTest
             }
-           axios.post("/api/doctor/register", register,
-           {headers: {Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjp7ImF1dGhvcml0eSI6IlJPTEVfQURNSU4ifSwic3ViIjoibWF0aUBhZG1pbi5jb20iLCJpYXQiOjE3MTIwMDMyMzEsImV4cCI6MTcxMjAwNjgzMX0.cgyHO0WPfFFCOXVN9GaWm1_tUpmIr9ue_wlwX5DmwKQ"}})
+            axios.post("/api/doctor/register", register,
+            {headers: {Authorization: "Bearer " + token}})
                 .then(response => {
                     console.log(register)
                     console.log(response.data)
-                    if (response.status === 200) {
+                    console.log(response.status);
+                    if (response.status === 201) {
+                        setRegisterSuccess(true)
                         setRegister({
                             firstName: "",
                             lastName: "",
@@ -229,7 +221,9 @@ const RegisterDoctor = () => {
             setEmailEntered(false)
             setEmailCharacters(false)
             setEmailExist(false)
+            setEmailInvalid(false)
             setRegisterSuccess(false)
+
         }
 
         if(e.target.name === "password") {
@@ -250,13 +244,13 @@ const RegisterDoctor = () => {
     }
 
     function handleSuccess() {
-        navigate("/login")
+        setRegisterSuccess(false)
     }
 
-    function handleCheckboxChange(e) {
-        setIsChecked(!isChecked)
-        setisNotChecked(false)
-    }
+    // function handleCheckboxChange(e) {
+    //     setIsChecked(!isChecked)
+    //     setisNotChecked(false)
+    // }
 
     let workDaysTest = []
 
@@ -284,64 +278,15 @@ const RegisterDoctor = () => {
 
 
 
-   
-   
-
-
 
     console.log(register)
-    // console.log(emailExist)
-
-
 
 
 
     return (
     <div className='flex flex-col w-full min-h-dvh'>
-        <header className='w-full flex-col flex items-center justify-center'>
-            <img className='w-60 pt-4 max-[768px]:hidden' src="/LogoSerenetyH.png" alt="Image logo Serenety Health Center" />
-            <div className='bg-blue-800 w-full items-center justify-center gap-4 mt-4 hidden md:flex space-x-4'>
-                <NavLink to="/registerDoctor" className="p-2 text-center font-bold text-[#F19E22] hover:text-white">Register Doctor</NavLink>
-                <NavLink to="/registerAdmin" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Register Admin</NavLink>
-                <NavLink to="/appointmentsAdmin" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Appointments</NavLink>
-                <NavLink to="/patientsAdmin" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Patients</NavLink>
-                <NavLink to="/doctorsAdmin" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Doctors</NavLink>
-                <NavLink to="/adminsAdmin" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Admins</NavLink>
-            </div>
-
-            <div className="md:hidden flex justify-between items-center w-full px-10 py-3">
-                        <button onClick={toggleMenu} className="text-white focus:outline-none pt-6">
-                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="black">
-                                {isOpen ? (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                ) : (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                )}
-                            </svg>
-                        </button>
-                        <img className='w-40 pt-4' src="/LogoSerenetyH.png" alt="Image logo Serenety Health Center" />
-            </div>
-            {isOpen && (
-                    <div className="absolute w-full bg-blue-600 md:hidden z-50 flex flex-col items-start justify-start gap-2 top-[85px] pl-8 h-full py-4">
-                        <NavLink to="/registerDoctor" className="p-2 text-center font-bold text-[#F19E22]">Register Doctor</NavLink>
-                        <NavLink to="/registerAdmin" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Register Admin</NavLink>
-                        <NavLink to="/appointmentsAdmin" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Appointments</NavLink>
-                        <NavLink to="/patientsAdmin" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Patients</NavLink>
-                        <NavLink to="/doctorsAdmin" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Doctors</NavLink>
-                        <NavLink to="/adminsAdmin" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Admins</NavLink>
-                    </div>
-                )}
-        </header>
+        
+        <HeaderAdmin />
 
         <main className='w-full flex flex-col flex-1'>
             <div className='flex flex-wrap justify-center items-center'>
@@ -366,13 +311,14 @@ const RegisterDoctor = () => {
                             {emailEntered && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Please enter your email</p>}
                             {emailCharacters && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Entered a valid email</p>}
                             {emailExist && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Invalid email entered</p>}
+                            {emailInvalid && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>The email has to contain @doctor</p>}
                         </fieldset>
                         
                         <fieldset className='flex justify-center items-center gap-3 relative'>
                             <img className='w-8' src="/Padlock.png" alt="" />
                             <input type="password" name="password" ref={passwordRef} className="font-semibold cursor-pointer border-2 border-[#F19E22] w-[300px] rounded-xl h-10 px-4" placeholder='Password' autoComplete="current-password" onFocus={handleSelectChange} onInput={handleInput}/>
                             {passwordEntered && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Please enter your password</p>}
-                            {passwordLength && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Password must be at least 8 characters</p>}
+                            {passwordLength && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Password must be at least 6 characters</p>}
                         </fieldset>
 
                         <fieldset className='flex justify-center items-center gap-3 relative'>
@@ -383,12 +329,11 @@ const RegisterDoctor = () => {
                                 <option value="female">FEMALE</option>
                                 <option value="other">OTHER</option>
                             </select>
-                            {/* <input type="text" name="genre" ref={genreRef} className="font-semibold cursor-pointer border-2 border-[#F19E22] w-[300px] rounded-xl h-10 px-4" placeholder='Genre' onFocus={handleSelectChange} onInput={handleInput}/> */}
                             {genreEntered && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Please enter your genre</p>}
                         </fieldset>
 
                         <fieldset className='flex justify-center items-center gap-3 relative'>
-                            <img className='w-8' src="/Genre.png" alt="" />
+                            <img className='w-8' src="/Speciality.png" alt="" />
                             <select name="speciality" ref={specialityRef} className="font-semibold cursor-pointer border-2 border-[#F19E22] w-[300px] rounded-xl h-10 px-4" onInput={handleInput} onFocus={handleSelectChange}>
                                 <option value="">Select an speciality...</option>
                                 {SPECIALITIES?.map((speciality) => (
@@ -398,55 +343,55 @@ const RegisterDoctor = () => {
                             {specialityLegend && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Please select the speciality</p>}
                         </fieldset>
 
-                        <fieldset className='flex justify-center items-center gap-3 relative' useRef={workDaysRef}>
-                            <img className='w-8' src="/Genre.png" alt="" />
+                        <fieldset className='flex justify-center items-center gap-3 relative' ref={workDaysRef}>
+                            <img className='w-8' src="/CalendarAppointment.png" alt="" />
                             <div className='flex flex-col'>
                             <p className='font-bold text-[#F19E22] ml-2'>WORK DAYS</p>
                             <div className='flex flex-wrap w-[300px] px-4 border-2 border-[#F19E22] rounded-xl py-2'>
-                                <div className='w-1/2 flex justify-center items-center gap-x-2'>
+                                <div className='w-1/2 flex justify-between items-center gap-x-2 px-2'>
                                 <label className='text-left w-1/2'>Monday</label>
-                                <input className='w-1/2' type='checkbox' value="MONDAY" name='workDays' onChange={checkboxWorkDays}></input>
+                                <input className='w-[14px] h-[14px]' type='checkbox' value="MONDAY" name='workDays' onChange={checkboxWorkDays}></input>
                                 </div>
-                                <div className='w-1/2 flex justify-center items-center gap-x-2'>
+                                <div className='w-1/2 flex justify-between items-center gap-x-2 px-2'>
                                 <label className='text-left w-1/2'>Tuesday</label>
-                                <input className='w-1/2' type='checkbox' value="TUESDAY" name='workDays' onChange={checkboxWorkDays}></input>
+                                <input className='w-[14px] h-[14px]' type='checkbox' value="TUESDAY" name='workDays' onChange={checkboxWorkDays}></input>
                                 </div>
-                                <div className='w-1/2 flex justify-center items-center gap-x-2'>
+                                <div className='w-1/2 flex justify-between items-center gap-x-2 px-2'>
                                 <label className='text-left w-1/2'>Wednesday</label>
-                                <input className='w-1/2' type='checkbox' value="WEDNESDAY" name='workDays' onChange={checkboxWorkDays}></input>
+                                <input className='w-[14px] h-[14px]' type='checkbox' value="WEDNESDAY" name='workDays' onChange={checkboxWorkDays}></input>
                                 </div>
-                                <div className='w-1/2 flex justify-center items-center gap-x-2'>
+                                <div className='w-1/2 flex justify-between items-center gap-x-2 px-2'>
                                 <label className='text-left w-1/2'>Thursday</label>
-                                <input className='w-1/2' type='checkbox' value="THURSDAY" name='workDays' onChange={checkboxWorkDays}></input>
+                                <input className='w-[14px] h-[14px]' type='checkbox' value="THURSDAY" name='workDays' onChange={checkboxWorkDays}></input>
                                 </div>
-                                <div className='w-1/2 flex justify-center items-center gap-x-2'>
+                                <div className='w-1/2 flex justify-between items-center gap-x-2 px-2'>
                                 <label className='text-left w-1/2'>Friday</label>
-                                <input className='w-1/2' type='checkbox' value="FRIDAY" name='workDays' onChange={checkboxWorkDays}></input>
+                                <input className='w-[14px] h-[14px]' type='checkbox' value="FRIDAY" name='workDays' onChange={checkboxWorkDays}></input>
                                 </div>
-                                <div className='w-1/2 flex justify-center items-center gap-x-2'>
+                                <div className='w-1/2 flex justify-between items-center gap-x-2 px-2'>
                                 <label className='text-left w-1/2'>Saturday</label>
-                                <input className='w-1/2' type='checkbox' value="SATURDAY" name='workDays' onChange={checkboxWorkDays}></input>
+                                <input className='w-[14px] h-[14px]' type='checkbox' value="SATURDAY" name='workDays' onChange={checkboxWorkDays}></input>
                                 </div>
-                                <div className='w-1/2 flex justify-center items-center gap-x-2'>
+                                <div className='w-1/2 flex justify-between items-center gap-x-2 px-2'>
                                 <label className='text-left w-1/2'>Sunday</label>
-                                <input className='w-1/2' type='checkbox' value="SUNDAY" name='workDays' onChange={checkboxWorkDays}></input>
+                                <input className='w-[14px] h-[14px]' type='checkbox' value="SUNDAY" name='workDays' onChange={checkboxWorkDays}></input>
                                 </div>
                                 {workDaysLegend && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Please select the work days</p>}
                             </div>
                             </div>
                         </fieldset>
 
-                        <fieldset className='flex justify-center items-center gap-3 relative' useRef={workDaysRef}>
-                            <img className='w-8' src="/Genre.png" alt="" />
+                        <fieldset className='flex justify-center items-center gap-3 relative' ref={hoursRef}>
+                            <img className='w-8' src="/WatchBlue.png" alt="" />
                             <div className='flex flex-col'>
                             <p className='font-bold text-[#F19E22] ml-2'>WORK HOURS</p>
                             <div className='flex flex-wrap w-[300px] px-4 border-2 border-[#F19E22] rounded-xl py-2'>
                                 <div className='w-1/3 flex justify-center items-center gap-x-2'>
-                                <label className='text-center'>8:00</label>
+                                <label className='text-center'>08:00</label>
                                 <input type='checkbox' value="8" name='hours' onChange={checkboxHour}></input>
                                 </div>
                                 <div className='w-1/3 flex justify-center items-center gap-x-2'>
-                                <label>9:00</label>
+                                <label>09:00</label>
                                 <input type='checkbox' value="9" name='hours' onChange={checkboxHour}></input>
                                 </div>
                                 <div className='w-1/3 flex justify-center items-center gap-x-2'>
@@ -478,26 +423,16 @@ const RegisterDoctor = () => {
                                 <input type='checkbox' value="18" name='hours' onChange={checkboxHour}></input>
                                 </div>
                                 {hoursLegend && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Please select the work hours</p>}
-
                             </div>
                             </div>
                         </fieldset>
-
-
-                        
-
-
-                        
-                        
                         
                         <div className='relative'>
                             <input type="submit" value="Register Doctor" className='bg-[#F19E22] rounded-xl py-2 px-1 hover:bg-[#dc901e] w-[180px] text-center font-bold text-white cursor-pointer'/>
-                            {/* {registerSuccess && <p className='text-green-600 font-bold italic text-xs absolute left-6'>Registered successfully</p>} */}
                             {registerSuccess && (
                             <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
                                 <div className="bg-white p-6 rounded-lg shadow-md text-center">
                                     <p className='text-green-600 font-bold text-lg'>Registered successfully!</p>
-                                    <p className="pt-4">Thank you for trusting Serenety Health Center.</p>
                                     <div className="flex justify-center gap-4 mt-6">
                                         <button className="bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 rounded-md w-[120px]" onClick={handleSuccess}>Continue</button>
                                     </div>
@@ -505,17 +440,14 @@ const RegisterDoctor = () => {
                             </div>
                             )}
                         </div>
-
-                       
                 </form>
             </div>
             
         </main>
 
 
-        <footer className='w-full pt-10 h-[80px] bg-blue-800'>
+        <FooterAdmin/>
 
-        </footer>
 
     </div>
     )

@@ -1,35 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
-import authActions from '../redux/actions/auth.actions.js'
 import { useParams } from 'react-router-dom'
+import HeaderAdmin from '../components/HeaderAdmin.jsx'
+import FooterAdmin from '../components/FooterAdmin.jsx'
 
 const PatientDetail = () => {
 
     const [doctors, setDoctors] = useState([])
-    console.log(doctors)
+    // console.log(doctors)
 
     let user = {
 
     }
+
     const [users, setUsers] = useState([])
 
-    const params = useParams();
-
-    const { login, current } = authActions
-    const dispatch = useDispatch()
+    const params = useParams()
 
     useEffect(() => {
+
+            const token = localStorage.getItem("token")
         
             axios.get("/api/patient/all", {
                 headers: {
-                    Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjp7ImF1dGhvcml0eSI6IlJPTEVfQURNSU4ifSwic3ViIjoibWF0aUBhZG1pbi5jb20iLCJpYXQiOjE3MTIwMDU5MDUsImV4cCI6MTcxMjAwOTUwNX0.0aFKSv2-izkH6ykbnjco7TIN300c4hjp79KNH3XvPMs"
+                    Authorization: "Bearer " + token
                 }
             })
                 .then(res => {
                     // dispatch(current(res.data))
-                    console.log(res.data);
+                    // console.log(res.data)
                     setUsers(res.data)
 
                     
@@ -39,12 +38,11 @@ const PatientDetail = () => {
 
     }, [])
 
-    console.log(users);
+    // console.log(users)
     user = users?.find(user => user.id == params.id)
 
-    // console.log(params.id);
+    // console.log(params.id)
 
-    console.log(user);
 
     useEffect(() => {
         axios.get('/api/doctor/all')
@@ -55,50 +53,70 @@ const PatientDetail = () => {
     }, [])
 
     const findDoctorSpecialty = (doctorName) => {
-        const doctor = doctors.find(doc => doc.firstName + ' ' + doc.lastName === doctorName);
-        console.log(doctor)
-        return doctor ? doctor.speciality : '';
-    };
+        const doctor = doctors.find(doc => doc.firstName + ' ' + doc.lastName === doctorName)
+        // console.log(doctor)
+        return doctor ? doctor.speciality : ''
+    }
+
+    let currentDate = new Date()
+    let userBirthDate = new Date(user?.birthDate)
+    let differenceMs = currentDate - userBirthDate
+
+    let ageDate = new Date(differenceMs)
+    let calculatedAge = Math.abs(ageDate.getUTCFullYear() - 1970)
+    // console.log(calculatedAge)
+    const ageToShow = isNaN(calculatedAge) ? 'N/A' : calculatedAge
 
 
     return (
-        <main className='flex flex-col gap-6 items-center py-4'>
-            
-            <section className='flex flex-col items-center'>
-                <h1 className='text-2xl text-[#06A9B2] font-semibold py-4 text- center'>Patient</h1>
-                <article className='w-[300px]'>
-                    <p className='font-semibold text-lg'>ID: <span className='font-normal'>{user?.id}</span></p>
-                    <p className='font-semibold text-lg'>NAME: <span className='font-normal'>{user?.firstName} {user?.lastName}</span></p>
-                    <p className='font-semibold text-lg'>GENRE: <span className='font-normal'>{user?.genre}</span></p>
-                    <p className='font-semibold text-lg'>BIRTH DATE: <span className='font-normal'>{user?.birthDate}</span></p>
-                </article>
-            </section>
+        <>
+            <HeaderAdmin/>
+
+            <main className='flex flex-col gap-6 items-center py-4 h-screen'>
+                
+                <section className='flex flex-col items-center'>
+                    <h1 className='text-2xl text-[#06A9B2] font-semibold py-4 text- center'>Patient</h1>
+                    <article className='w-[300px]'>
+                        <p className='font-semibold text-lg'>ID: <span className='font-normal'>{user?.id}</span></p>
+                        <p className='font-semibold text-lg'>NAME: <span className='font-normal'>{user?.firstName} {user?.lastName}</span></p>
+                        <p className='font-semibold text-lg'>GENRE: <span className='font-normal'>{user?.genre}</span></p>
+                        <p className='font-semibold text-lg'>AGE: <span className='font-normal'>{ageToShow}</span></p>
+
+                        <p className='font-semibold text-lg'>EMAIL: <span className='font-normal'>{user?.email}</span></p>
+                    </article>
+                </section>
 
 
-            <section className='flex flex-col items-center'>
-                <h2 className='text-2xl text-[#06A9B2] font-semibold py-4 text- center'>Appoiments</h2>
-                <table className='bg-stone-800 flex flex-col p-3 rounded-lg w-[369px]'>
-                    <thead className='text-neutral-400 border-b-2 border-neutral-300'>
-                        <tr className='flex pb-4 justify-center'>
-                            <th className='w-[20%]'>Doctor</th>
-                            <th className='w-[35%]'>Specialtie</th>
-                            <th className='w-[30%]'>Date</th>
-                            <th className='w-[15%]'>Hour</th>
-                        </tr>
-                    </thead>
-                    <tbody className='text-white flex flex-col'>
-                        {user?.appointments?.map(appointment => (
-                            <tr key={appointment.id} className='flex py-4 justify-center text-center text-sm'>
-                                <td className='w-[20%]'>{appointment.doctor}</td>
-                                <td className='w-[35%]'>{findDoctorSpecialty(appointment.doctor)}</td>
-                                <td className='w-[30%]'>{appointment.date}</td>
-                                <td className='w-[15%]'>{appointment.time}</td>
+                <section className='flex flex-col items-center'>
+                    <h2 className='text-2xl text-[#06A9B2] font-semibold py-4 text- center'>Appoiments</h2>
+                    <table className='bg-stone-800 flex flex-col p-3 rounded-lg w-[369px] md:w-[600px]'>
+                        <thead className='text-neutral-400 border-b-2 border-neutral-300'>
+                            <tr className='flex pb-4 justify-center'>
+                                <th className='w-[20%] text-left'>Doctor</th>
+                                <th className='w-[35%] text-left'>Specialtie</th>
+                                <th className='w-[30%] text-center'>Date</th>
+                                <th className='w-[15%] text-right'>Hour</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </section>
-        </main>
+                        </thead>
+                        <tbody className='text-white flex flex-col'>
+                            {user?.appointments
+                            ?.toSorted((a, b) => new Date(a.date) - new Date(b.date))
+                            ?.map(appointment => (
+                                <tr key={appointment.id} className='flex py-4 justify-center text-center text-sm'>
+                                    <td className='w-[20%] text-left'>{appointment.doctor}</td>
+                                    <td className='w-[35%] text-left'>{findDoctorSpecialty(appointment.doctor)}</td>
+                                    <td className='w-[30%] text-center'>{appointment.date}</td>
+                                    <td className='w-[15%] text-right'>{appointment.time} hs.</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </section>
+            </main>
+
+            <FooterAdmin/>
+        </>
+        
     )
 }
 

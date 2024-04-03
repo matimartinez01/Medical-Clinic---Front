@@ -50,7 +50,7 @@ function GeneralFooter() {
 
 
     return (
-        <footer>
+        <footer className='w-full'>
             <div className='flex flex-col items-center justify-center bg-blue-800 w-full min-h-[600px] gap-2 py-6'>
                 <img className='w-60 pt-4' src="/LogoSerenetyH.png" alt="Image logo Serenety Health Center" />
                 <div className='flex flex-col justify-center gap-14 mt-4 lg:flex-row'>

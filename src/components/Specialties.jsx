@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 
 const Specialties = () => {
@@ -73,58 +73,60 @@ const Specialties = () => {
     };
     
 
-    console.log(filteredDoctors)
-    console.log(selectedSpecialty)
+    // console.log(filteredDoctors)
+    // console.log(selectedSpecialty)
+
+    // console.log(doctors.map(doctor => doctor.id))
 
 
     return (
-        <main className='flex flex-col py-6 min-h-[100vh]'>
+        <main className='flex flex-col py-6'>
             <section className='flex flex-col items-center gap-8'>
                 <h1 className='text-3xl text-[#06A9B2] font-semibold'>Specialties</h1>
                 <p className='text-center px-2'>Click on the specialty you are looking for to view the medical history.</p>
-                <article className='flex flex-wrap gap-8 justify-center'>
-                    <div className='flex flex-col items-center'>
+                <article className='flex flex-wrap gap-1 justify-center'>
+                    <div className='flex flex-col items-center w-[175px]'>
                         <div className='rounded-full border-2 border-[#F19E22] w-[70px] h-[70px] flex justify-center items-center hover:bg-[#F19E22] ' onClick={() => filterDoctorsBySpecialty('corazon')}>
                             <div style={{ backgroundImage: `url(${getBackgroundImage('corazon')})` }} className='bg-cover bg-center w-[60px] h-[60px] p-2 rounded-full'></div>
                         </div>
                         <p className='font-semibold'>CARDIOLOGIST</p>
                     </div>
 
-                    <div className='flex flex-col items-center'>
+                    <div className='flex flex-col items-center w-[175px]'>
                         <div className='rounded-full border-2 border-[#F19E22] w-[70px] h-[70px] flex justify-center items-center hover:bg-[#F19E22]' onClick={() => filterDoctorsBySpecialty('nino')}>
                             <div style={{ backgroundImage: `url(${getBackgroundImage('nino')})` }} className='bg-cover bg-center w-[60px] h-[60px] p-2 rounded-full'></div>
                         </div>
                         <p className='font-semibold'>PEDIATRICIAN</p>
                     </div>
 
-                    <div className='flex flex-col items-center'>
+                    <div className='flex flex-col items-center w-[175px]'>
                         <div className='rounded-full border-2 border-[#F19E22] w-[70px] h-[70px] flex justify-center items-center hover:bg-[#F19E22]' onClick={() => filterDoctorsBySpecialty('cerebro')}>
                             <div style={{ backgroundImage: `url(${getBackgroundImage('cerebro')})` }} className='bg-cover bg-center w-[60px] h-[60px] p-2 rounded-full'></div>
                         </div>
                         <p className='font-semibold'>NEUROLOGIST</p>
                     </div>
 
-                    <div className='flex flex-col items-center'>
+                    <div className='flex flex-col items-center w-[175px]'>
                         <div className='rounded-full border-2 border-[#F19E22] w-[70px] h-[70px] flex justify-center items-center hover:bg-[#F19E22]' onClick={() => filterDoctorsBySpecialty('utero')}>
                             <div style={{ backgroundImage: `url(${getBackgroundImage('utero')})` }} className='bg-cover bg-center w-[60px] h-[60px] p-2 rounded-full'></div>
                         </div>
                         <p className='font-semibold'>GYNECOLOGIST</p>
                     </div>
-                    <div className='flex flex-col items-center'>
+                    <div className='flex flex-col items-center w-[175px]'>
                         <div className='rounded-full border-2 border-[#F19E22] w-[70px] h-[70px] flex justify-center items-center hover:bg-[#F19E22]' onClick={() => filterDoctorsBySpecialty('neumologia')}>
                             <div style={{ backgroundImage: `url(${getBackgroundImage('neumologia')})` }} className='bg-cover bg-center w-[60px] h-[60px] p-2 rounded-full'></div>
                         </div>
                         <p className='font-semibold'>PULMONOLOGIST</p>
                     </div>
 
-                    <div className='flex flex-col items-center'>
+                    <div className='flex flex-col items-center w-[175px]'>
                         <div className='rounded-full border-2 border-[#F19E22] w-[70px] h-[70px] flex justify-center items-center hover:bg-[#F19E22]' onClick={() => filterDoctorsBySpecialty('hueso')}>
                             <div style={{ backgroundImage: `url(${getBackgroundImage('hueso')})` }} className='bg-cover bg-center w-[60px] h-[60px] p-2 rounded-full'></div>
                         </div>
                         <p className='font-semibold'>TRAUMATOLOGIST</p>
                     </div>
 
-                    <div className='flex flex-col items-center'>
+                    <div className='flex flex-col items-center w-[175px]'>
                         <div className='rounded-full border-2 border-[#F19E22] w-[70px] h-[70px] flex justify-center items-center hover:bg-[#F19E22]' onClick={() => filterDoctorsBySpecialty('estomago')}>
                             <div style={{ backgroundImage: `url(${getBackgroundImage('estomago')})` }} className='bg-cover bg-center w-[60px] h-[60px] p-2 rounded-full'></div>
                         </div>
@@ -133,13 +135,15 @@ const Specialties = () => {
                 </article>
 
                 {!selectedSpecialty && (
-                    <div className='flex flex-col gap-4 items-center'>
+                    <div className='flex flex-col gap-4 items-center w-3/4'>
                         <h2 className='text-2xl text-[#06A9B2] font-semibold py-4'>Doctors</h2>
 
                         <div className='flex flex-col gap-4 justify-center md:flex-row flex-wrap'>
                             {doctors.map(doctor => (
-                                <div className='p-4 border-2 border-[#06A9B2] bg-[#87eef3] rounded-xl text-center' key={doctor.id}>
-                                    <p className='font-semibold'>{doctor.firstName} {doctor.lastName} - {doctor.speciality}</p>
+                                <div className='p-4 border-2 border-[#307275] bg-[#06A9B2] rounded-xl text-center w-[315px]' key={doctor.id}>
+                                    <p className='font-semibold text-white'>{doctor.firstName} {doctor.lastName} - {doctor.speciality}</p>
+                                    <Link  key={doctor.id} to='/prueba' state= {{ doctor: doctor }} >Hola</Link>
+                                    {/* <Link  key={doctor.id} to='/appointment' state= {{ doctor: doctor }} >Hola</Link> */}
                                 </div>
                             ))}
                         </div>
@@ -151,8 +155,8 @@ const Specialties = () => {
                         <h2 className='text-2xl text-[#06A9B2] font-semibold py-4'>Doctors</h2>
 
                         {filteredDoctors.map(doctor => (
-                            <div className='p-4 border-2 border-[#06A9B2] bg-[#87eef3] rounded-xl text-center' key={doctor.id}>
-                                <p className='font-semibold'>{doctor.firstName} {doctor.lastName} - {doctor.speciality}</p>
+                            <div className='p-4 border-2 border-[#307275] bg-[#06A9B2] rounded-xl text-center w-[315px]' key={doctor.id}>
+                                <p className='font-semibold text-white'>{doctor.firstName} {doctor.lastName} - {doctor.speciality}</p>
                             </div>
                         ))}
                     </div>
@@ -161,6 +165,7 @@ const Specialties = () => {
 
 
             </section>
+
         </main>
     )
 }

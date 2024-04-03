@@ -6,6 +6,9 @@ import { NavLink } from 'react-router-dom'
 
 const GeneralHeader = () => {
 
+    const customShadowStyle = {
+        textShadow: '0px 0px 2px rgba(255, 255, 255, 0.5)'}
+
     const [isOpen, setIsOpen] = useState(false)
 
     const toggleMenu = () => {
@@ -35,10 +38,13 @@ const GeneralHeader = () => {
                     </div>
                     
                 </div>
-                <div className='bg-blue-800 w-full items-center justify-center gap-4 mt-4 hidden md:flex space-x-4'>
-                    <NavLink to="/" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Home</NavLink>
-                    <NavLink to="/home" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Medical Specialties</NavLink>
-                    <NavLink to="/contact" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Contact</NavLink>
+                <div className='bg-blue-800 w-full items-center justify-center gap-4 mt-4 hidden md:flex space-x-4 text-xl'>
+                    <NavLink to="/" className={({ isActive }) =>
+                        isActive ? "p-2 text-center font-bold text-[#F19E22] hover:text-white" : "p-2 text-center font-bold text-white hover:text-[#F19E22]"}>Home</NavLink>
+                    <NavLink to="/specialtiesHome" className={({ isActive }) =>
+                        isActive ? "p-2 text-center font-bold text-[#F19E22] hover:text-white" : "p-2 text-center font-bold text-white hover:text-[#F19E22]"}>Medical Specialties</NavLink>
+                    <NavLink to="/contact" className={({ isActive }) =>
+                        isActive ? "p-2 text-center font-bold text-[#F19E22] hover:text-white" : "p-2 text-center font-bold text-white hover:text-[#F19E22]"}>Contact</NavLink>
                     
                     
                 </div>
@@ -68,7 +74,7 @@ const GeneralHeader = () => {
                 {isOpen && (
                         <div className="absolute w-full bg-blue-600 md:hidden z-50 flex flex-col items-start justify-start gap-4 top-[100px] pl-8 h-full">
                             <NavLink to="/" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Home</NavLink>
-                            <NavLink to="/home" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Medical Specialties</NavLink>
+                            <NavLink to="/specialtiesHome" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Medical Specialties</NavLink>
                             <NavLink to="/contact" className="p-2 text-center font-bold text-white hover:text-[#F19E22]">Contact</NavLink>
                             <hr className='w-[95%]' />
                             <NavLink to="/register" className="p-2 text-center font-bold text-[#F19E22] hover:text-white">Sing up</NavLink>

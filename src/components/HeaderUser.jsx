@@ -104,8 +104,9 @@ const HeaderUser = () => {
                             return (
                                 <Fragment key={link.href}>
                                     <div className='flex items-center gap-2 pt-4 px-6'>
-                                        {/* <NavLink to={link.href}><img className='w-5 h-5 cursor-pointer' src={`${link.title}.png`} alt={`Icon ${link.title}`} onClick={toggleMenu}/></NavLink> */}
-                                        <NavLink to={link.href} className="block text-black font-semibold" onClick={toggleMenu}>{link.title}</NavLink>
+                                        {/* <NavLink to={link.href} className="block text-black font-semibold pl-7" onClick={toggleMenu}>{link.title}</NavLink> */}
+                                        <NavLink to={link.href} className={({ isActive }) =>
+                                        isActive ? "p-2 text-center font-semibold text-[#F19E22] hover:text-black pl-7" : "p-2 pl-7 text-center font-semibold text-black hover:text-[#F19E22]"} onClick={toggleMenu}>{link.title}</NavLink>
                                     </div>
                                 </Fragment>
 
@@ -114,7 +115,7 @@ const HeaderUser = () => {
                         }
                         <div className='flex items-center gap-2 cursor-pointer py-6 px-6 ' onClick={handleConfirm}>
                             <img className='w-5 h-5' src="/LogoutOrange.png" alt="Icon log out" />
-                            <p className="block text-black font-semibold">Sign off</p>
+                            <p className="block text-black font-semibold hover:text-[#F19E22]">Sign off</p>
                         </div>
 
 

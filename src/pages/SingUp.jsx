@@ -36,6 +36,7 @@ function SingUp() {
     const [passwordEntered, setPasswordEntered] = useState(false)
     const [genreEntered, setGenreEntered] = useState(false)
     const [birthDateEntered, setBirthDateEntered] = useState(false)
+    const [ageInvalid, setAgeInvalid] = useState(false)
     const [passwordLength, setPasswordLength] = useState(false)
     const [registerSuccess, setRegisterSuccess] = useState(false)
 
@@ -111,6 +112,23 @@ function SingUp() {
             birthDateValid = false
         }
 
+        const today = new Date();
+        const birthDate = new Date(birthDateRef.current.value);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--
+        }
+        if (age < 18) {
+        setAgeInvalid (true);
+        birthDateValid = false;
+        }
+
+        if(emailRef.current.value.includes("@admin") || emailRef.current.value.includes("@doctor")) {
+            setEmailExist(true)
+            emailValid = false
+        }
+
         if(!isChecked && firstNameValid && lastNameValid && emailValid && passwordValid) {
             setisNotChecked(true)
         }
@@ -144,7 +162,7 @@ function SingUp() {
                 })
                 .catch(error => {
                     console.log(error.response.data)
-                    if (error.response.data == "There is a patient with that email") {
+                    if (error.response.data == "There is a patient with that email" || error.response.data == "You can't use that email") {
                         setEmailExist(true)
                     }
                 })
@@ -268,7 +286,7 @@ function SingUp() {
                                 <img className="w-4 cursor-pointer absolute left-[275px] top-[15px]" src={showPassword ? "/EyeOpen.png" : "/EyeClosed.png"} alt="Toggle password visibility" onClick={handleShowPassword}/>
                             </div>
                             {passwordEntered && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Please enter your password</p>}
-                            {passwordLength && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Password must be at least 8 characters</p>}
+                            {passwordLength && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Password must be at least 6 characters</p>}
                         </fieldset>
 
                         <fieldset className='flex justify-center items-center gap-3 relative'>
@@ -281,7 +299,6 @@ function SingUp() {
                                     <option value="OTHER">OTHER</option>
                                 </select>
                             </div>
-                            {/* <input type="text" name="genre" ref={genreRef} className="font-semibold cursor-pointer border-2 border-[#F19E22] w-[300px] rounded-xl h-10 px-4" placeholder='Genre' onFocus={handleSelectChange} onInput={handleInput}/> */}
                             {genreEntered && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Please enter your genre</p>}
                         </fieldset>
 
@@ -291,6 +308,7 @@ function SingUp() {
                                 <input type="date" name="birthDate" ref={birthDateRef} className="font-semibold cursor-pointer border-2 border-[#F19E22] w-[300px] rounded-xl h-10 px-4" onFocus={handleSelectChange} onInput={handleInput}/>
                             </div>
                             {birthDateEntered && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>Please enter your birthdate</p>}
+                            {ageInvalid && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-16px] left-12'>You must be at least 18 years old</p>}
                         </fieldset>
 
 
@@ -303,7 +321,6 @@ function SingUp() {
                         
                         <div className='relative'>
                             <input type="submit" value="Sing up" className='bg-[#F19E22] rounded-xl py-2 px-1 hover:bg-[#dc901e] w-[180px] text-center font-bold text-white cursor-pointer'/>
-                            {/* {registerSuccess && <p className='text-green-600 font-bold italic text-xs absolute left-6'>Registered successfully</p>} */}
                             {registerSuccess && (
                             <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
                                 <div className="bg-white p-6 rounded-lg shadow-md text-center">

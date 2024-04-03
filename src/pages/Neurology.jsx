@@ -12,7 +12,7 @@ function Neurology() {
                     <h1 className="text-center font-bold text-5xl mb-6 text-[#06A9B2]">Neurology, Clinical Neurosurgery</h1>
                     <h1 className="text-center font-bold text-5xl mb-6 text-[#06A9B2]">and Spine Surgery</h1>
                     <h2 className="text-center font-bold text-5xl mb-4 text-[#F19E22]">at INECCU</h2>
-                    <p className="text-center w-3/4 mx-auto text-lg font-semibold italic">Our team of highly skilled specialists is dedicated to providing comprehensive care for a wide range 
+                    <p className="text-justify w-3/4 mx-auto text-xl">Our team of highly skilled specialists is dedicated to providing comprehensive care for a wide range 
                     of neurological conditions and spinal disorders. We are committed to helping you achieve a better quality of life through personalized treatment plans 
                     and cutting-edge techniques.</p>
                 </div>

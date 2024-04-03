@@ -3,7 +3,6 @@ import axios from "axios"
 import { useSelector } from "react-redux"
 import authActions from "../redux/actions/auth.actions"
 import { useDispatch } from "react-redux"
-import Swal from "sweetalert2"
 
 // Función para obtener la fecha actual en el formato YYYY-MM-DD
 const getCurrentDate = () => {
@@ -80,44 +79,6 @@ function CalendarAppointmentsAdmin({doctorConfirmed, patientConfirmed}) {
         setConfirmAppointment(true)
         setTimeAndDate1(timeAndDate[1])
         setTimeAndDate0(timeAndDate[0])
-
-
-        // Swal.fire({
-        //     title: "YOUR APPOINTMENT",
-        //     text: `Date: ${timeAndDate[1]}, Hour: ${timeAndDate[0]}, Doctor: ${doctor.firstName + " " + doctor.lastName}`,
-        //     icon: "warning",
-        //     showCancelButton: true,
-        //     confirmButtonColor: "#3085d6",
-        //     cancelButtonColor: "#d33",
-        //     confirmButtonText: "CONFIRM!"
-        // })
-        // .then((result) => {
-        //     if (result.isConfirmed) {
-        //         axios.post("/api/appointment/",
-        //             { date: timeAndDate[1], time: timeAndDate[0], emailDoctor: emailDoctor },
-        //             { headers: { Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjp7ImF1dGhvcml0eSI6IlJPTEVfUEFUSUVOVCJ9LCJzdWIiOiJndWlsbGVwZXJlekBnbWFpbC5jb20iLCJpYXQiOjE3MTE1ODA1MjUsImV4cCI6MTcxMTU4NDEyNX0.aItBUz-9PNkWHCCoODFK63eM9I_uFhUTpRRO3nkvs_I" } },
-        //         )
-        //             .then(a => {
-        //                 console.log(a.data)
-        //                 setSuccessAppointment(true)
-        //                 setTimeAndDate1(timeAndDate[1])
-        //                 setTimeAndDate0(timeAndDate[0])
-        //             })
-        //             .catch(err => console.log(err.response.data))
-                
-                
-                // .then(() => {
-                //     window.location.reload()
-                // })
-
-
-                // Swal.fire({
-                //     title: "Your appointment has been scheduled!",
-                //     text: `Date: ${timeAndDate[1]}, Hour: ${timeAndDate[0]}, Doctor: ${doctor.firstName + " " + doctor.lastName}`,
-                //     icon: "success"
-                // })
-            // }
-        // })
     }
 
 
@@ -136,7 +97,7 @@ function CalendarAppointmentsAdmin({doctorConfirmed, patientConfirmed}) {
         setConfirmAppointment(false)
         axios.post("/api/admin/appointment",
                     { date: timeAndDate1, time: timeAndDate0, emailDoctor: emailDoctor, emailPatient: patientConfirmed.email },
-                    { headers: { Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjp7ImF1dGhvcml0eSI6IlJPTEVfQURNSU4ifSwic3ViIjoibWF0aUBhZG1pbi5jb20iLCJpYXQiOjE3MTIwMDMyMzEsImV4cCI6MTcxMjAwNjgzMX0.cgyHO0WPfFFCOXVN9GaWm1_tUpmIr9ue_wlwX5DmwKQ" } },
+                    { headers: { Authorization: "Bearer " + token }},
                 ).then(a => {
                     console.log(a.data)
                     setSuccessAppointment(true)
@@ -179,18 +140,11 @@ function CalendarAppointmentsAdmin({doctorConfirmed, patientConfirmed}) {
                 <input type="date" value={selectedDate} onChange={handleDateChange} className="px-4 py-2 bg-gray-200 rounded-lg font-semibold text-gray-500"/>
             </div>
 
-            {/* <div className="flex items-center justify-between gap-x-[100px] mb-4 px-4">
-                <button onClick={prevWeek} className="px-4 py-2 bg-[#F19E22] text-white rounded-lg font-bold hover:bg-[#dc901e] w-32 md:hidden">Prev</button>
-                <button onClick={nextWeek} className="px-4 py-2 bg-[#F19E22] text-white rounded-lg font-bold hover:bg-[#dc901e] w-32 md:hidden">Next</button>
-            </div> */}
-            
             <div className="flex justify-center items-center">
 
                 <img src="/Prev.png" alt="Icon previous" className="w-[50px] cursor-pointer transition ease-in-out delay-100 hover:scale-110  duration-500" onClick={prevWeek}/>
-                {/* max-[767px]:hidden */}
 
                 <div className="grid md:grid-cols-3 gap-2 ml-2 mr-2 ">
-                {/* grid grid-cols-3 gap-2 md:mt-6 ml-2 mr-2  */}
 
                 {weekDays.map((day, index) => (
                     <div key={index} className={`border p-4 ${color} border-[#F19E22] border-[2px] rounded-xl max-w-[220px] bg-[#F19E22] bg-opacity-15 max-h-[205px] overflow-auto`} >
@@ -205,6 +159,7 @@ function CalendarAppointmentsAdmin({doctorConfirmed, patientConfirmed}) {
                                     appointmentDate = appointmentDate.toISOString().split('T')[0]
                                     if (appointmentDate > currentDate || appointmentDate == currentDate && currentHour < hour) {
                                         const turnosCoincidentes = appointments?.filter(turno => turno.date === day.datePrueba && turno.time === hour)
+
                                         // Utiliza una expresión ternaria para renderizar condicionalmente el botón
                                         return turnosCoincidentes?.length === 0 ? (
                                             <button
@@ -230,18 +185,13 @@ function CalendarAppointmentsAdmin({doctorConfirmed, patientConfirmed}) {
                             </div>
                         )}
                         {!doctor.workDays?.includes(day.dayOfWeek.toUpperCase()) && (
-                            // <p className="text-center font-semibold text-gray-400 italic">The doctor {doctor?.firstName + " " + doctor?.lastName} doesn't work on this day.</p>
                             <p className="text-center font-semibold text-gray-400 italic">Without medical attention.</p>
                         )}
 
                     </div>
                     ))}
                 </div>
-
-                {/* <button onClick={nextWeek} className=" bg-[#F19E22] text-white rounded-lg font-bold hover:bg-[#dc901e] w-[70px] h-[40px]">Next</button> */}
                 <img src="/Next.png" alt="Icon next" className="w-[50px] cursor-pointer transition ease-in-out delay-100 hover:scale-110  duration-500" onClick={nextWeek}/>
-                {/* max-[767px]:hidden */}
-            
             </div>
             
 

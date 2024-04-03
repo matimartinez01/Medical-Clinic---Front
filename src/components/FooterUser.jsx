@@ -3,9 +3,7 @@ import React from 'react'
 
 function FooterUser() {
     return (
-        <footer className='w-full bg-[#F19E22] py-6 flex flex-col items-center px-2 text-white'>
-            <img src="/Logo.png" alt="" className='bg-white rounded-full p-0.5 w-[60px] h-[60px]' />
-
+        <footer className='w-full bg-[#F19E22] py-4 flex flex-col items-center px-2 text-white'>
             <article className='flex flex-col items-center w-full md:flex-row'>
                 <div className=' flex flex-col gap-2 border-b-2 border-white py-6 px-2 text-center w-[75%] md:border-0 md:w-[33%]'>
                     <div className='flex flex-col text-center gap-4'>
@@ -17,10 +15,11 @@ function FooterUser() {
                     <p className='font-semibold'>Visit Us Online: <span className='font-normal'> www.serenityhealthcenter.com</span></p>
                 </div>
 
-                <div className='flex flex-col gap-2 items-center border-white border-b-2 py-4 px-2 text-center w-[75%] md:border-0 md:w-[33%]'>
+                <div className='flex flex-col gap-4 items-center border-white border-b-2 py-4 px-2 text-center w-[75%] md:border-0 md:w-[33%]'>
+                    <img src="/public/Logo.png" alt="" className='bg-white rounded-full p-0.5 w-[60px] h-[60px]' />
                     <h2 className='text-xl font-semibold text-center w-[100%]'>Follow us</h2>
                     <div className='flex gap-4'>
-                        <img src="/WhatsAppOrange.png" alt="" className='w-[50px] h-[50px]' />
+                        <img src="/WhatsappOrange.png" alt="" className='w-[50px] h-[50px]' />
                         <img src="/InstagramOrange.png" alt="" className='w-[50px] h-[50px]' />
                         <img src="/FacebookOrange.png" alt="" className='w-[50px] h-[50px]' />
                     </div>
