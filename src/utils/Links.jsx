@@ -1,19 +1,12 @@
 export const LINKS_HEADER = [
     {
-        href:"/appointments",
-        title:"Appointments"
+        href:"/specialties",
+        title:"Specialties"
     },
     {
-        href:"/doctors",
-        title:"Doctors"
+        href:"/appointment",
+        title:"Appointment"
     },
-    {
-        href:"/Services",
-        title:"Services"
-    },
-    {
-        href:"/medicalStudies",
-        title:"Medical Studies"
-    },
-    
 ]
+
+

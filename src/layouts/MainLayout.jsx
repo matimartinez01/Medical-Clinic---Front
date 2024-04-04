@@ -1,7 +1,7 @@
 import React from 'react'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
 import { Outlet } from 'react-router-dom'
+import FooterUser from '../components/FooterUser.jsx'
+import HeaderUser from '../components/HeaderUser.jsx'
 
 
 
@@ -10,10 +10,10 @@ import { Outlet } from 'react-router-dom'
 function MainLayout(props) {
     return (
         <div className="flex flex-col w-full min-h-dvh items-center">
-            <Header/>
+            <HeaderUser/>
                 {/* {props.children} */}
                 <Outlet/>
-            <Footer/>
+            <FooterUser/>
         </div>
     )
 }
