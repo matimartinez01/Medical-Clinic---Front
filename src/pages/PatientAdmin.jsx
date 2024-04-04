@@ -50,7 +50,7 @@ const PatientsAdmin = () => {
 
             <main className='w-full flex flex-col flex-1 items-center'>
                 <div className='flex flex-wrap justify-center items-center w-full'>
-                    <img className='md:w-full md:h-[500px] object-cover object-center' src="/Register.jpg" alt="Image a doctor" />
+                    <img className='md:w-full object-cover object-center' src="/BannerAdmin.png" alt="Image a doctor" />
                 </div>    
 
                 <h1 className="text-center font-bold text-5xl mt-4 text-[#F19E22]">PATIENTS</h1>

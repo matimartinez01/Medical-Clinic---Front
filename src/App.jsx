@@ -68,8 +68,6 @@ function App() {
     const PatientDetailWithAuth = withAuth(PatientDetail)
     const DoctorDetailWithAuth = withAuth(DoctorDetail)
 
-    const PruebaWithAuth = withAuth(Prueba)
-
 
     const token = localStorage.getItem("token")
     const role = getRoleFromJWT(token)
@@ -108,7 +106,6 @@ function App() {
 
             <Route path='appointment' element={isUser ? <SelectAppointmentWithauth /> : <Navigate to="/login" />}/>
             <Route path='specialties' element={isUser ? <SpecialtiesWithAuth /> : <Navigate to="/login" />}/>
-            <Route path='prueba' element={isUser ? <PruebaWithAuth /> : <Navigate to="/login" />}/>
           </Route>
         </Routes>
       </BrowserRouter>

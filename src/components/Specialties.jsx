@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 const Specialties = () => {
     const [doctors, setDoctors] = useState([])
-    const [selectedSpecialty, setSelectedSpecialty] = useState('');
+    const [selectedSpecialty, setSelectedSpecialty] = useState('')
 
     useEffect(() => {
         axios.get('/api/doctor/all')
@@ -19,58 +19,58 @@ const Specialties = () => {
     const filterDoctorsBySpecialty = (specialty) => {
         // Si la especialidad seleccionada es la misma que la actual, eliminamos la selección
         if (selectedSpecialty === specialty) {
-            setSelectedSpecialty(null);
+            setSelectedSpecialty(null)
         } else {
-            setSelectedSpecialty(specialty);
+            setSelectedSpecialty(specialty)
         }
-    };
+    }
     
 
     const filteredDoctors = doctors.filter(doctor => {
-        if (!selectedSpecialty) return true; // Cuando no hay una especialidad seleccionada, devuelve true para todos los doctores
+        if (!selectedSpecialty) return true // Cuando no hay una especialidad seleccionada, devuelve true para todos los doctores
         switch (selectedSpecialty.toLowerCase()) {
             case 'corazon':
-                return doctor.speciality.toUpperCase() === 'CARDIOLOGIST';
+                return doctor.speciality.toUpperCase() === 'CARDIOLOGIST'
             case 'nino':
-                return doctor.speciality.toUpperCase() === 'PEDIATRICIAN';
+                return doctor.speciality.toUpperCase() === 'PEDIATRICIAN'
             case 'cerebro':
-                return doctor.speciality.toUpperCase() === 'NEUROLOGIST';
+                return doctor.speciality.toUpperCase() === 'NEUROLOGIST'
             case 'utero':
-                return doctor.speciality.toUpperCase() === 'GYNECOLOGIST';
+                return doctor.speciality.toUpperCase() === 'GYNECOLOGIST'
             case 'neumologia':
-                return doctor.speciality.toUpperCase() === 'PULMONOLOGIST';
+                return doctor.speciality.toUpperCase() === 'PULMONOLOGIST'
             case 'hueso':
-                return doctor.speciality.toUpperCase() === 'TRAUMATOLOGIST';
+                return doctor.speciality.toUpperCase() === 'TRAUMATOLOGIST'
             case 'estomago':
-                return doctor.speciality.toUpperCase() === 'GASTROENTEROLOGIST';
+                return doctor.speciality.toUpperCase() === 'GASTROENTEROLOGIST'
             default:
-                return false;
+                return false
         }
-    });
+    })
 
     const getBackgroundImage = (specialty) => {
-        const isSelected = selectedSpecialty === specialty;
-        const baseImagePath = "/public/";
+        const isSelected = selectedSpecialty === specialty
+        const baseImagePath = "/"
     
         switch (specialty) {
             case 'corazon':
-                return isSelected ? `${baseImagePath}corazonOrange.png` : `${baseImagePath}corazon.png`;
+                return isSelected ? `${baseImagePath}corazonOrange.png` : `${baseImagePath}corazon.png`
             case 'nino':
-                return isSelected ? `${baseImagePath}ninoOrange.png` : `${baseImagePath}nino.png`;
+                return isSelected ? `${baseImagePath}ninoOrange.png` : `${baseImagePath}nino.png`
             case 'cerebro':
-                return isSelected ? `${baseImagePath}cerebroOrange.png` : `${baseImagePath}cerebro.png`;
+                return isSelected ? `${baseImagePath}cerebroOrange.png` : `${baseImagePath}cerebro.png`
             case 'utero':
-                return isSelected ? `${baseImagePath}uteroOrange.png` : `${baseImagePath}utero.png`;
+                return isSelected ? `${baseImagePath}uteroOrange.png` : `${baseImagePath}utero.png`
             case 'neumologia':
-                return isSelected ? `${baseImagePath}neumologiaOrange.png` : `${baseImagePath}neumologia.png`;
+                return isSelected ? `${baseImagePath}neumologiaOrange.png` : `${baseImagePath}neumologia.png`
             case 'hueso':
-                return isSelected ? `${baseImagePath}huesoOrange.png` : `${baseImagePath}hueso.png`;
+                return isSelected ? `${baseImagePath}huesoOrange.png` : `${baseImagePath}hueso.png`
             case 'estomago':
-                return isSelected ? `${baseImagePath}estomagoOrange.png` : `${baseImagePath}estomago.png`;
+                return isSelected ? `${baseImagePath}estomagoOrange.png` : `${baseImagePath}estomago.png`
             default:
-                return `${baseImagePath}defaultImage.png`;
+                return `${baseImagePath}defaultImage.png`
         }
-    };
+    }
     
 
     // console.log(filteredDoctors)
@@ -140,24 +140,29 @@ const Specialties = () => {
 
                         <div className='flex flex-col gap-4 justify-center md:flex-row flex-wrap'>
                             {doctors.map(doctor => (
-                                <div className='p-4 border-2 border-[#307275] bg-[#06A9B2] rounded-xl text-center w-[315px]' key={doctor.id}>
-                                    <p className='font-semibold text-white'>{doctor.firstName} {doctor.lastName} - {doctor.speciality}</p>
-                                    <Link  key={doctor.id} to='/prueba' state= {{ doctor: doctor }} >Hola</Link>
-                                    {/* <Link  key={doctor.id} to='/appointment' state= {{ doctor: doctor }} >Hola</Link> */}
-                                </div>
+
+                                <Link  key={doctor.id} to='/appointment' state= {{ doctor: doctor }} >
+                                    <div className='p-4 border-2 border-[#307275] bg-[#06A9B2] rounded-xl text-center w-[315px]' key={doctor.id}>
+                                        <p className='font-semibold text-white'>{doctor.firstName} {doctor.lastName} - {doctor.speciality}</p>
+                                    </div>
+                                </Link>
                             ))}
                         </div>
                     </div>
                 )}
+
+                {/* <Link  key={doctor.id} to='/appointment' state= {{ doctor: doctor }} >Hola</Link> */}
 
                 {selectedSpecialty && (
                     <div className='flex flex-col gap-4 items-center'>
                         <h2 className='text-2xl text-[#06A9B2] font-semibold py-4'>Doctors</h2>
 
                         {filteredDoctors.map(doctor => (
-                            <div className='p-4 border-2 border-[#307275] bg-[#06A9B2] rounded-xl text-center w-[315px]' key={doctor.id}>
-                                <p className='font-semibold text-white'>{doctor.firstName} {doctor.lastName} - {doctor.speciality}</p>
-                            </div>
+                            <Link  key={doctor.id} to='/appointment' state= {{ doctor: doctor }} >
+                                <div className='p-4 border-2 border-[#307275] bg-[#06A9B2] rounded-xl text-center w-[315px]' key={doctor.id}>
+                                    <p className='font-semibold text-white'>{doctor.firstName} {doctor.lastName} - {doctor.speciality}</p>
+                                </div>
+                            </Link>
                         ))}
                     </div>
                 )}

@@ -7,12 +7,6 @@ export const LINKS_HEADER = [
         href:"/appointment",
         title:"Appointment"
     },
-
-    {
-    href:"/prueba",
-    title:"Prueba"
-}
-
 ]
 
 

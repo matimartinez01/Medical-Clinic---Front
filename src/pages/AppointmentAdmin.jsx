@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
-import { useSelector } from 'react-redux'
 import CalendarAppointmentsAdmin from '../components/CalendarAppointmentsAdmin'
-import { NavLink } from 'react-router-dom'
 import HeaderAdmin from '../components/HeaderAdmin'
 import FooterAdmin from '../components/FooterAdmin'
+import { SPECIALITIES } from '../utils/linksSpecialities'
+
 
 
 function AppointmentAdmin() {
@@ -31,7 +31,7 @@ function AppointmentAdmin() {
 
     const [email, setEmail] = useState('')
     const [user, setUser] = useState("")
-    const [specialities, setSpecialities] = useState([])
+    // const [specialities, setSpecialities] = useState([])
 
     useEffect(() => {
 
@@ -50,13 +50,13 @@ function AppointmentAdmin() {
 
     console.log(patients)
 
-    useEffect(() => {
-        axios.get('/api/doctor/specialities')
-            .then(response => {
-                setSpecialities(response.data)
-            })
-            .catch(error => console.log(error))
-    }, [])
+    // useEffect(() => {
+    //     axios.get('/api/doctor/specialities')
+    //         .then(response => {
+    //             setSpecialities(response.data)
+    //         })
+    //         .catch(error => console.log(error))
+    // }, [])
 
     useEffect(() => {
         axios.get('/api/doctor/all')
@@ -174,6 +174,9 @@ function AppointmentAdmin() {
 
 
         <main className='flex flex-col w-full min-h-dvh'>
+            <div className='flex flex-wrap justify-center items-center w-full'>
+                <img className='md:w-full object-cover object-center' src="/BannerAdmin.png" alt="Image a doctor" />
+            </div>
 
             <h3 className='text-center text-[#06A9B2] font-bold mt-10 px-2 text-2xl'>Register an appointment</h3>
             <div className='flex flex-col justify-center items-center mt-6'>
@@ -190,11 +193,11 @@ function AppointmentAdmin() {
                         <img src="/Speciality.png" alt="Image hands and health" className='w-8'/>
                         <select ref={specialityRef} name="speciality" onChange={handleSpecialitySelect} onClick={handleInput} onFocus={handleSelectChange} className='font-semibold cursor-pointer border-2 border-[#F19E22] w-[300px] rounded-xl h-10 px-4 relative'>
                             <option value="" >Select a speciality...</option>
-                            {specialities?.map((speciality, index) => (
+                            {SPECIALITIES?.map((speciality, index) => (
                                 <option key={index} value={speciality}>{speciality}</option>
                             ))}
                         </select>
-                        {specialitySelected && <p className='text-red-600 font-bold italic text-xs absolute bottom-[10px] left-16'>Please select a speciality</p>}
+                        {specialitySelected && <p className='text-red-600 font-bold italic text-xs absolute top-[40px] left-16'>Please select a speciality</p>}
                     </fieldset>
                     
                     <fieldset className='flex justify-center items-center gap-3 relative'>
@@ -205,7 +208,7 @@ function AppointmentAdmin() {
                                 <option key={index} value={doctor.firstName + " " + doctor.lastName}>{doctor.firstName + " " + doctor.lastName}</option>
                             ))}
                         </select>
-                        {doctorSelected && <p className='text-red-600 font-bold italic text-xs absolute bottom-[10px] left-16'>Please select a doctor</p>}
+                        {doctorSelected && <p className='text-red-600 font-bold italic text-xs absolute top-[40px] left-16'>Please select a doctor</p>}
                     </fieldset>
                 </div>
                 

@@ -12,25 +12,9 @@ function SelectAppointment() {
 
     const user = useSelector(store => store.authReducer.user)
 
-    // console.log(user)
-
     const location = useLocation()
 
-    let doctorIdParams = location?.state?.doctor
-    // let doctorIdParams = location?.state?.doctorId
-
-    const [effectExecuted, setEffectExecuted] = useState(false);
-
-    console.log(doctorIdParams)
-
     const [doctors, setDoctors] = useState([])
-    const [filteredDoctors, setFilteredDoctors] = useState([])
-    const [selectedSpecialityAndDoctor, setSelectedSpecialityAndDoctor] = useState({
-        speciality: '',
-        doctor: ''
-    })
-
-    const [doctorConfirmed, setDoctorConfirmed] = useState({})
 
     const [specialitySelected, setSpecialitySelected] = useState(false)
     const [doctorSelected, setDoctorSelected] = useState(false)
@@ -41,8 +25,8 @@ function SelectAppointment() {
 
     const [successDelete, setSuccessDelete] = useState(false)
 
-    const specialityRef = useRef(null)
-    const doctorRef = useRef(null)
+    const [selectedSpeciality, setSelectedSpeciality] = useState('');
+    const [selectedDoctor, setSelectedDoctor] = useState(null);
 
     let appoinmentQuantity = user.appointments?.length
     
@@ -55,92 +39,60 @@ function SelectAppointment() {
 
     const dispatch = useDispatch()
     const { current } = authActions
-    
 
-    const [selectedDoctor, setSelectedDoctor] = useState('')
-
-    // useEffect(() => {
-    //     if(selectedSpecialityAndDoctor.speciality != undefined && selectedSpecialityAndDoctor.speciality != null) {
-    //         const doctorsFilteredBySpeciality = doctors.filter(doctor => doctor.speciality === selectedSpecialityAndDoctor.speciality)
-    //         setFilteredDoctors(doctorsFilteredBySpeciality)
-    //     }
-    // }, [selectedSpecialityAndDoctor.speciality, doctors])
-
-    // console.log(filteredDoctors)
-
-    // console.log(selectedDoctor)
-    // useEffect(() => {
-    //     if (!effectExecuted && (doctorIdParams != undefined || doctorIdParams != null)) {
-    //         setSelectedSpecialityAndDoctor({
-    //             speciality: doctors?.find(doctor => doctor.id == doctorIdParams)?.speciality,
-    //             doctor: doctors?.find(doctor => doctor.id == doctorIdParams)?.firstName + " " + doctors?.find(doctor => doctor.id == doctorIdParams)?.lastName
-    //         });
-    //         setEffectExecuted(true)
-    //     } else if (effectExecuted) {
-    //         doctorIdParams = null
-    //     }
-    // }, [effectExecuted, filteredDoctors, doctors, doctorIdParams]);
-
-    // console.log(location?.state)
-
-    console.log(selectedSpecialityAndDoctor)
 
     useEffect(() => {
         axios.get('/api/doctor/all')
             .then(response => {
-                setDoctors(response.data)
+                setDoctors(response.data);
             })
-            .catch(error => console.log(error))
-    }, [])
+            .catch(error => console.log(error));
+    }, []);
+
+
+    useEffect(() => {
+        if (location.state && location.state.doctor) {
+            setSelectedDoctor(location.state.doctor);
+            setSelectedSpeciality(location.state.doctor.speciality);
+        }
+    }, [location.state]);
+
+    const filteredDoctors = doctors.filter(doctor => doctor.speciality === selectedSpeciality);
 
     // console.log(doctors)
 
-    const handleSpecialitySelect = (e) => {
-        setFilteredDoctors(doctors.filter(doctor => doctor.speciality === e.target.value))
-        setSelectedSpecialityAndDoctor({
-            ...selectedSpecialityAndDoctor,
-            doctor: '',
-        })
+        const handleSpecialitySelect = (e) => {
+            const speciality = e.target.value;
+            setSelectedSpeciality(speciality);
+            setSelectedDoctor(null);
+            setShowAppointment(false); // Resetear el estado para que no muestre el calendario automáticamente
+        };
+
+        const handleDoctorSelect = (e) => {
+            const fullName = e.target.value;
+            const selectedDoctor = doctors.find(doctor => `${doctor.firstName} ${doctor.lastName}` === fullName);
+            setSelectedDoctor(selectedDoctor);
+        };
+
+
+        const handleShowAppointment = () => {
+            if (selectedSpeciality && selectedDoctor) {
+                setShowAppointment(true);
+            } else {
+                setShowAppointment(false);
+            }
+            if(!selectedSpeciality) {
+                setSpecialitySelected(true)
+            }
+            if(!selectedDoctor) {
+                setDoctorSelected(true)
+            }
         }
 
-    function handleInput(e) {
-        setDoctorConfirmed(doctors.find(doctor => doctor.firstName + " " + doctor.lastName === e.target.value))
-        
-        return setSelectedSpecialityAndDoctor({
-            ...selectedSpecialityAndDoctor,
-            [e.target.name]: e.target.value
-        })
-    }
 
-    // console.log(doctorConfirmed)
-
-    function handleShowAppointment(e) {
-        if (selectedSpecialityAndDoctor.speciality && selectedSpecialityAndDoctor.doctor) {
-
-            setShowAppointment(true)
-        } else {
-            setShowAppointment(false)
-        }
-
-        if(!selectedSpecialityAndDoctor.speciality) {
-            setSpecialitySelected(true)
-        }
-        if(!selectedSpecialityAndDoctor.doctor) {
-            setDoctorSelected(true)
-        }
-    }   
-
-
-    function handleSelectChange(e) {
-        if (e.target.name === "speciality") {
-            setSpecialitySelected(false)
-        }
-        if(e.target.name === "doctor") {
-            setDoctorSelected(false)
-        }
-        setShowAppointment(false)
-    }
-
+    
+    console.log(selectedDoctor)
+    console.log(selectedSpeciality)
 
     // console.log(currentDate)
     // console.log(currentHour)
@@ -149,7 +101,6 @@ function SelectAppointment() {
     // console.log(appointment.time)
     // const isPastAppointment = appointmentDate < currentDate || currentDate == appointmentDate && currentHour > appointment.time
 
-    // console.log(selectedSpecialityAndDoctor)
     // console.log(doctors)
 
     // console.log(user.appointments)
@@ -178,7 +129,6 @@ function SelectAppointment() {
         }).then(response => {
             console.log(response.data)
             setConfirmDelete([false, ""])
-            // window.location.reload()
         }).catch(error => console.log(error.response.data))
         
     }
@@ -208,6 +158,16 @@ function SelectAppointment() {
             })
             .catch(error => console.log(error.response.data))
     }
+
+        function handleSelectChange(e) {
+        if (e.target.name === "speciality") {
+            setSpecialitySelected(false)
+        }
+        if(e.target.name === "doctor") {
+            setDoctorSelected(false)
+        }
+    }
+
 
 
     return (
@@ -247,8 +207,8 @@ function SelectAppointment() {
                         </thead>
                         <tbody>
                             {user.appointments
-                            ?.toSorted((a, b) => new Date(b.date) - new Date(a.date))
                             ?.toSorted((a, b) => b.time - a.time)
+                            ?.toSorted((a, b) => new Date(b.date) - new Date(a.date))
                             ?.map(appointment => {
                                 let currentDate = new Date()
                                 let currentHour = currentDate.getHours()
@@ -270,7 +230,7 @@ function SelectAppointment() {
                                     <td className={`font-semibold text-center text-[12px] min-[600px]:text-base h-10 min-[600px]:hidden ${colorClass}`}>{doctors?.find (doctor => doctor.firstName + " " + doctor.lastName === appointment.doctor)?.speciality.slice(0,4)}</td>
                                     <td className={`font-semibold text-center text-[12px] min-[600px]:text-base h-10 max-[600px]:hidden ${colorClass}`}>{doctors?.find (doctor => doctor.firstName + " " + doctor.lastName === appointment.doctor)?.speciality}</td>
                                     <td className={`font-semibold text-xs min-[600px]:text-base h-10 px-2 ${colorClass}`}>{appointment.doctor}</td>
-                                    <td className='md:px-2'><img id={appointment.id} onClick={handleConfirm} src="/Delete.png" alt="Icon delete appointment" className={`w-4 ${hideTrash}`}/></td>
+                                    <td className='md:px-2 cursor-pointer'><img id={appointment.id} onClick={handleConfirm} src="/Delete.png" alt="Icon delete appointment" className={`w-4 ${hideTrash}`}/></td>
                                     
                                 </tr>
                             )})}
@@ -313,45 +273,38 @@ function SelectAppointment() {
             ) : null}
         
         
-        <h3 className='text-center text-[#06A9B2] font-bold mt-10 px-2 text-2xl'>Get your medical appointment with just one click!</h3>
-        <div className='flex flex-col justify-center items-center mt-6 gap-6'>
-            <div className='flex flex-col gap-6 md:flex-row md:gap-20'> 
-                <fieldset className='flex justify-center items-center gap-3 relative'>
-                    <img src="/Speciality.png" alt="Image hands and health" className='w-8'/>
-                    <select ref={specialityRef} name="speciality" onChange={handleSpecialitySelect} onClick={handleInput} onFocus={handleSelectChange} 
-                    className='font-semibold cursor-pointer border-2 border-[#F19E22] w-[300px] rounded-xl h-10 px-4 relative'>
-                        {/* value={selectedSpecialityAndDoctor.speciality} */}
-                        <option value="" >Please select a speciality...</option>
-                        {SPECIALITIES.map((speciality, index) => (
-                            <option key={index} value={speciality}>{speciality}</option>
-                        ))}
-                    </select>
-                    {specialitySelected && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-17px] left-16'>Please select a speciality</p>}
-                </fieldset>
-                
-                <fieldset className='flex justify-center items-center gap-3 relative'>
-                    <img src="/Doctor.png" alt="Image doctor icon" className='w-8' />
-                    <select ref={doctorRef} name="doctor" className='font-semibold cursor-pointer border-2 border-[#F19E22] w-[300px] rounded-xl h-10 px-4' 
-                    onClick={handleInput} onFocus={handleSelectChange}>
-                        {/* value={selectedSpecialityAndDoctor.doctor} */}
-                        {/* value={selectedDoctor} */}
-                        <option value=""  >Please select a doctor...</option>
-                        {filteredDoctors.map((doctor, index) => (
-                            <option key={index} value={doctor.firstName + " " + doctor.lastName}>{doctor.firstName + " " + doctor.lastName}</option>
-                        ))}
-                    </select>
-                    {doctorSelected && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-17px] left-16'>Please select a doctor</p>}
-                </fieldset>
+        <div className='flex flex-1 flex-col justify-center items-center'>
+            <h3 className='text-center text-[#06A9B2] font-bold mt-10 px-2 text-2xl'>Get your medical appointment with just one click!</h3>
+            <div className='flex flex-col justify-center items-center mt-6 gap-6'>
+                <div className='flex flex-col gap-6 md:flex-row md:gap-20'>
+                    <fieldset className='flex justify-center items-center gap-3 relative'>
+                        <select name="speciality" onChange={handleSpecialitySelect} value={selectedSpeciality} className='font-semibold cursor-pointer border-2 border-[#F19E22] w-[300px] rounded-xl h-10 px-4 relative' 
+                        onFocus={handleSelectChange}>
+                            <option value="" >Please select a speciality...</option>
+                            {SPECIALITIES.map((speciality, index) => (
+                                <option key={index} value={speciality}>{speciality}</option>
+                            ))}
+                        </select>
+                        {specialitySelected && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-17px] left-6'>Please select a speciality</p>}
+                    </fieldset>
+                    <fieldset className='flex justify-center items-center gap-3 relative'>
+                        <select name="doctor" onChange={handleDoctorSelect} value={selectedDoctor ? `${selectedDoctor.firstName} ${selectedDoctor.lastName}` : ''} className='font-semibold cursor-pointer border-2 border-[#F19E22] w-[300px] rounded-xl h-10 px-4'
+                        onFocus={handleSelectChange}>
+                            <option value="">Please select a doctor...</option>
+                            {filteredDoctors.map((doctor, index) => (
+                                <option key={index} value={`${doctor.firstName} ${doctor.lastName}`}>{doctor.firstName} {doctor.lastName}</option>
+                            ))}
+                        </select>
+                        {doctorSelected && <p className='text-red-600 font-bold italic text-xs absolute bottom-[-17px] left-6'>Please select a doctor</p>}
+                    </fieldset>
+                </div>
+                <button className='bg-[#F19E22] font-bold text-white w-40 h-14 rounded-lg mt-6 hover:bg-[#dc901e] mb-14' onClick={handleShowAppointment}>Show Available Appointments</button>
+                {showAppointment && selectedDoctor && (
+                    <div>
+                        <CalendarAppointments doctorConfirmed={selectedDoctor} />
+                    </div>
+                )}
             </div>
-            
-            <button className='bg-[#F19E22] font-bold text-white w-40 h-14 rounded-lg mt-6 hover:bg-[#dc901e] mb-14' onClick={handleShowAppointment}>Show Available Appointments</button>
-            
-            {showAppointment && (
-            <div>
-                <CalendarAppointments doctorConfirmed={doctorConfirmed}/>
-            </div>
-        )}
-
         </div>
         
     </div>

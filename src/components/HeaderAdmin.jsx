@@ -53,7 +53,7 @@ function HeaderAdmin() {
     return (
         <header className='w-full flex-col flex items-center justify-center'>
                 <img className='w-60 pt-4 max-[768px]:hidden' src="/LogoSerenetyH.png" alt="Image logo Serenety Health Center" />
-                <div className='bg-blue-800 w-full items-center justify-center gap-4 mt-4 hidden md:flex space-x-4 text-xl'>
+                <div className='bg-blue-800 w-full items-center justify-center gap-2 mt-4 hidden md:flex space-x-4 text-xl lg:gap-6'>
                     <NavLink to="/registerDoctor" className={({ isActive }) =>
                     isActive ? "p-2 text-center font-bold text-[#F19E22] hover:text-white" : "p-2 text-center font-bold text-white hover:text-[#F19E22]"}>Register Doctor</NavLink>
                     <NavLink to="/registerAdmin" className={({ isActive }) =>
@@ -64,7 +64,7 @@ function HeaderAdmin() {
                     isActive ? "p-2 text-center font-bold text-[#F19E22] hover:text-white" : "p-2 text-center font-bold text-white hover:text-[#F19E22]"}>Patients</NavLink>
                     <NavLink to="/doctorsAdmin" className={({ isActive }) =>
                     isActive ? "p-2 text-center font-bold text-[#F19E22] hover:text-white" : "p-2 text-center font-bold text-white hover:text-[#F19E22]"}>Doctors</NavLink>
-                    <div className='max-[767px]:hidden flex justify-center items-center px-4'>
+                    <div className='max-[767px]:hidden flex justify-center items-center'>
                         <img className='w-8 h-8 cursor-pointer' src="/LogoutOrangeAdmin.png" alt="Icon log out" onClick={handleConfirm} />
                     </div>
                 </div>
